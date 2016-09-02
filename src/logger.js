@@ -69,24 +69,25 @@ class Logger {
     const message = target.name + "." + property;
     const method = descriptor.value;
 
-    return (...args) => {
+    descriptor.value = function() {
+      const args = [].slice.call(arguments);
       const callback = args.pop();
-      const msg = this._formatMethod(message, args);
+      const msg = logger._formatMethod(message, args);
 
-      this.info(msg, true);
+      logger.silly(msg);
 
       // wrap final callback
       args.push((error, value) => {
         if (error) {
-          this.error(msg, true);
+          logger.error(msg);
         } else {
-          this.success(msg + " => " + this._formatValue(value), true);
+          logger.silly(msg + " => " + logger._formatValue(value));
         }
 
         callback(error, value);
       });
 
-      method(...args);
+      method.apply(this, args);
     };
   }
 
@@ -94,17 +95,18 @@ class Logger {
     const message = target.name + "." + property;
     const method = descriptor.value;
 
-    return (...args) => {
-      const msg = this._formatMethod(message, args);
+    descriptor.value = function() {
+      const args = [].slice.call(arguments);
+      const msg = logger._formatMethod(message, args);
 
-      this.info(msg, true);
+      logger.silly(msg);
 
       try {
-        const result = method(...args);
-        this.success(msg + " => " + this._formatValue(result), true);
+        const result = method.apply(this, args);
+        logger.silly(msg + " => " + logger._formatValue(result));
         return result;
       } catch (error) {
-        this.error(msg, error, true);
+        logger.error(msg, error);
         throw error;
       }
     };
@@ -136,4 +138,6 @@ LEVELS.forEach(([type, color]) => {
   };
 });
 
-export default new Logger();
+const logger = new Logger();
+
+export default logger;
