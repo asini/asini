@@ -14,20 +14,11 @@ export default class InitCommand extends Command {
   }
 
   execute(callback) {
-    this.ensurePackagesDirectory();
     this.ensurePackageJSON();
     this.ensureAsiniJson();
     this.ensureNoVersionFile();
     this.logger.success("Successfully created Asini files");
     callback(null, true);
-  }
-
-  ensurePackagesDirectory() {
-    const packagesLocation = this.repository.packagesLocation;
-    if (!FileSystemUtilities.existsSync(packagesLocation)) {
-      this.logger.info("Creating packages folder.");
-      FileSystemUtilities.mkdirSync(packagesLocation);
-    }
   }
 
   ensurePackageJSON() {
@@ -51,7 +42,12 @@ export default class InitCommand extends Command {
   }
 
   ensureAsiniJson() {
-    let {versionLocation, asiniJsonLocation, asiniJson} = this.repository;
+    let {
+      versionLocation,
+      asiniJsonLocation,
+      asiniJson,
+      packageConfigs,
+    } = this.repository;
 
     let version;
 
@@ -74,6 +70,7 @@ export default class InitCommand extends Command {
 
     objectAssign(asiniJson, {
       asini: this.asiniVersion,
+      packages: packageConfigs,
       version: version
     });
 
