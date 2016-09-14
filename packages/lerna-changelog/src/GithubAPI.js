@@ -6,7 +6,7 @@ export default class GithubAPI {
   constructor(config) {
     const {repo} = config;
     this.repo = repo;
-    this.cache = new ApiDataCache('github', config);
+    this.cache = new ApiDataCache("github", config);
     this.auth = process.env.GITHUB_AUTH;
     if (!this.auth) {
       throw new ConfigurationError("Must provide GITHUB_AUTH");
@@ -14,11 +14,11 @@ export default class GithubAPI {
   }
 
   getIssueData(issue) {
-    return this._get('issue', issue);
+    return this._get("issue", issue);
   }
 
   getUserData(login) {
-    return this._get('user', login);
+    return this._get("user", login);
   }
 
   _get(type, key) {

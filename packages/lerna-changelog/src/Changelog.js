@@ -5,7 +5,7 @@ import execSync           from "./execSync";
 import ConfigurationError from "./ConfigurationError";
 
 export default class Changelog {
-  constructor(config) {
+  constructor() {
     this.config = this.getConfig();
     this.remote = new RemoteRepo(this.config);
   }
@@ -160,7 +160,7 @@ export default class Changelog {
         response.mergeMessage = message;
         return response;
       } else if (mergeCommit) {
-        var issueNumber = mergeCommit[1];
+        issueNumber = mergeCommit[1];
         response = this.remote.getIssueData(issueNumber);
         response.commitSHA = sha;
         response.mergeMessage = message;
@@ -200,10 +200,4 @@ export default class Changelog {
 
     return categories;
   }
-}
-
-function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function(text){
-      return text.charAt(0).toUpperCase() + text.substr(1).toLowerCase();
-    });
 }
