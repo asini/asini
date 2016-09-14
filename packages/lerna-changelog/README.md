@@ -1,6 +1,6 @@
-# Lerna Changelog
+# Asini Changelog
 
-Generate a changelog for a [lerna][lerna-homepage] monorepo.
+Generate a changelog for a [asini][asini-homepage] monorepo.
 
 Based on [@hzoo][hzoo-profile]'s long-lived [PR][original-pr] for `lerna changelog`.
 
@@ -11,13 +11,13 @@ Uses github PR/Issue names categorized by labels with configurable headings.
 Install:
 
 ```bash
-$ npm install -g lerna-changelog
+$ npm install -g asini-changelog
 ```
 
 Configure:
 
 ```diff
-$ git diff lerna.json
+$ git diff asini.json
 ...
  {
 +  "changelog": {
@@ -28,7 +28,7 @@ $ git diff lerna.json
 +    },
 +    "cacheDir": ".changelog"
 +  },
-   "lerna": "2.0.0-beta.9",
+   "asini": "x.x.x",
    "version": "0.2.11"
  }
 ```
@@ -42,7 +42,7 @@ $ export GITHUB_AUTH="..."
 Run:
 
 ```bash
-$ lerna-changelog
+$ asini-changelog
 
 ## Unreleased (2016-05-24)
 
@@ -72,6 +72,6 @@ You'll need a GitHub API [personal access token](https://github.com/settings/tok
 - `cacheDir` [optional]: A place to stash GitHub API responses to avoid throttling
 - `labels`: GitHub issue/PR labels mapped to changelog section headers
 
-[lerna-homepage]: https://lernajs.io
+[asini-homepage]: https://github.com/asini/asini
 [hzoo-profile]: https://github.com/hzoo
 [original-pr]: https://github.com/lerna/lerna/pull/29

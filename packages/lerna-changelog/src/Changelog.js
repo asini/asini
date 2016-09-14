@@ -1,5 +1,5 @@
-import LernaRepo          from "lerna/lib/Repository";
-import progressBar        from "lerna/lib/progressBar";
+import AsiniRepo          from "asini/lib/Repository";
+import progressBar        from "asini/lib/progressBar";
 import RemoteRepo         from "./RemoteRepo";
 import execSync           from "./execSync";
 import ConfigurationError from "./ConfigurationError";
@@ -11,18 +11,18 @@ export default class Changelog {
   }
 
   getConfig() {
-    const lerna = new LernaRepo();
+    const asini = new AsiniRepo();
 
-    const config = lerna.lernaJson.changelog;
+    const config = asini.asiniJson.changelog;
 
     if (!config) {
       throw new ConfigurationError(
-        "Missing changelog config in `lerna.json`.\n"+
-        "See docs for setup: https://github.com/lerna/lerna-changelog#readme"
+        "Missing changelog config in `asini.json`.\n"+
+        "See docs for setup: https://github.com/asini/asini-changelog#readme"
       );
     }
 
-    config.rootPath = lerna.rootPath;
+    config.rootPath = asini.rootPath;
 
     return config;
   }

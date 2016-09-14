@@ -1,10 +1,10 @@
 {
-  "name": "lerna-changelog",
-  "version": "0.2.0",
-  "description": "Generate a changelog for a lerna monorepo",
+  "name": "asini-changelog",
+  "version": "0.0.1",
+  "description": "Generate a changelog for an Asini repo",
   "main": "index.js",
   "bin": {
-    "lerna-changelog": "cli.js"
+    "asini-changelog": "cli.js"
   },
   "scripts": {
     "build": "babel src -d lib",
@@ -14,18 +14,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lerna/lerna-changelog.git"
+    "url": "git+https://github.com/asini/asini-changelog.git"
   },
   "keywords": [
-    "lerna",
+    "asini",
     "changelog"
   ],
   "author": "Bo Borgerson <gigabo@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lerna/lerna-changelog/issues"
+    "url": "https://github.com/asini/asini-changelog/issues"
   },
-  "homepage": "https://github.com/lerna/lerna-changelog#readme",
+  "homepage": "https://github.com/asini/asini-changelog#readme",
   "devDependencies": {
     "babel-cli": "^6.9.0",
     "babel-preset-es2015": "^6.9.0",
@@ -33,7 +33,7 @@
     "rimraf": "^2.5.2"
   },
   "peerDependencies": {
-    "lerna": "^2.0.0-beta.8"
+    "asini": "^0.0.1"
   },
   "dependencies": {
     "chalk": "^1.1.3",
