@@ -9,7 +9,7 @@ export default class ExitHandler {
   }
 
   writeLogs() {
-    const filePath = path.join(process.cwd(), "lerna-debug.log");
+    const filePath = path.join(process.cwd(), "asini-debug.log");
     const fileContent = this._formatLogs(logger.logs);
 
     FileSystemUtilities.writeFileSync(filePath, fileContent);
@@ -28,7 +28,7 @@ export default class ExitHandler {
   }
 
   _formatType(type) {
-    return pad("lerna(" + type + ")", 15, " ");
+    return pad("asini(" + type + ")", 15, " ");
   }
 
   _formatError(error) {

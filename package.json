@@ -1,6 +1,6 @@
 {
-  "name": "lerna",
-  "version": "2.0.0-beta.28",
+  "name": "asini",
+  "version": "0.0.1",
   "description": "Tool for managing JavaScript projects with multiple packages",
   "main": "lib/index.js",
   "scripts": {
@@ -14,14 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lerna/lerna.git"
+    "url": "git+https://github.com/asini/asini.git"
   },
   "author": "Sebastian McKenzie <sebmck@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/lerna/lerna/issues"
+    "url": "https://github.com/asini/asini/issues"
   },
-  "homepage": "https://lernajs.io/",
   "dependencies": {
     "async": "^1.5.0",
     "chalk": "^1.1.1",
@@ -44,7 +43,7 @@
     "sync-exec": "^0.6.2"
   },
   "bin": {
-    "lerna": "./bin/lerna.js"
+    "asini": "./bin/asini.js"
   },
   "devDependencies": {
     "babel-cli": "^6.7.5",

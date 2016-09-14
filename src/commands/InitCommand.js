@@ -16,9 +16,9 @@ export default class InitCommand extends Command {
   execute(callback) {
     this.ensurePackagesDirectory();
     this.ensurePackageJSON();
-    this.ensureLernaJson();
+    this.ensureAsiniJson();
     this.ensureNoVersionFile();
-    this.logger.success("Successfully created Lerna files");
+    this.logger.success("Successfully created Asini files");
     callback(null, true);
   }
 
@@ -38,7 +38,7 @@ export default class InitCommand extends Command {
     if (!packageJson.devDependencies) packageJson.devDependencies = {};
 
     objectAssignSorted(packageJson.devDependencies, {
-      lerna: this.lernaVersion
+      asini: this.asiniVersion
     });
 
     if (!packageJson) {
@@ -50,8 +50,8 @@ export default class InitCommand extends Command {
     FileSystemUtilities.writeFileSync(packageJsonLocation, JSON.stringify(packageJson, null, "  "));
   }
 
-  ensureLernaJson() {
-    let {versionLocation, lernaJsonLocation, lernaJson} = this.repository;
+  ensureAsiniJson() {
+    let {versionLocation, asiniJsonLocation, asiniJson} = this.repository;
 
     let version;
 
@@ -59,25 +59,25 @@ export default class InitCommand extends Command {
       version = "independent";
     } else if (FileSystemUtilities.existsSync(versionLocation)) {
       version = FileSystemUtilities.readFileSync(versionLocation);
-    } else if (lernaJson && lernaJson.version) {
-      version = lernaJson.version;
+    } else if (asiniJson && asiniJson.version) {
+      version = asiniJson.version;
     } else {
       version = "0.0.0";
     }
 
-    if (!lernaJson) {
-      this.logger.info("Creating lerna.json.");
-      lernaJson = {};
+    if (!asiniJson) {
+      this.logger.info("Creating asini.json.");
+      asiniJson = {};
     } else {
-      this.logger.info("Updating lerna.json.");
+      this.logger.info("Updating asini.json.");
     }
 
-    objectAssign(lernaJson, {
-      lerna: this.lernaVersion,
+    objectAssign(asiniJson, {
+      asini: this.asiniVersion,
       version: version
     });
 
-    FileSystemUtilities.writeFileSync(lernaJsonLocation, JSON.stringify(lernaJson, null, "  "));
+    FileSystemUtilities.writeFileSync(asiniJsonLocation, JSON.stringify(asiniJson, null, "  "));
   }
 
   ensureNoVersionFile() {

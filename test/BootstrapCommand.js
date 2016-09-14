@@ -47,7 +47,7 @@ describe("BootstrapCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")), "lerna-debug.log should not exist");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
           // Make sure the `prepublish` script got run (index.js got created).
           assert.ok(pathExists.sync(path.join(testDir, "packages", "package-1", "index.js")));
           // package-1 should not have any packages symlinked
@@ -126,7 +126,7 @@ describe("BootstrapCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")), "lerna-debug.log should not exist");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
 
           done();
         } catch (err) {
@@ -164,7 +164,7 @@ describe("BootstrapCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")), "lerna-debug.log should not exist");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
           assert.deepEqual(spawnArgs, [
             ["install", "external@^1.0.0"],
             ["install", "external@^2.0.0"]
@@ -206,7 +206,7 @@ describe("BootstrapCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")), "lerna-debug.log should not exist");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
           assert.ok(!installed, "The external dependency was not installed");
           done();
         } catch (err) {

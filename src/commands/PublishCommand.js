@@ -81,7 +81,7 @@ export default class PublishCommand extends Command {
   execute(callback) {
     try {
       if (!this.repository.isIndependent() && !this.flags.canary) {
-        this.updateVersionInLernaJson();
+        this.updateVersionInAsiniJson();
       }
 
       this.updateUpdatedPackages();
@@ -245,11 +245,11 @@ export default class PublishCommand extends Command {
     }
   }
 
-  updateVersionInLernaJson() {
-    this.repository.lernaJson.version = this.masterVersion;
-    FileSystemUtilities.writeFileSync(this.repository.lernaJsonLocation, JSON.stringify(this.repository.lernaJson, null, "  "));
+  updateVersionInAsiniJson() {
+    this.repository.asiniJson.version = this.masterVersion;
+    FileSystemUtilities.writeFileSync(this.repository.asiniJsonLocation, JSON.stringify(this.repository.asiniJson, null, "  "));
     if (!this.flags.skipGit) {
-      GitUtilities.addFile(this.repository.lernaJsonLocation);
+      GitUtilities.addFile(this.repository.asiniJsonLocation);
     }
   }
 
@@ -351,7 +351,7 @@ export default class PublishCommand extends Command {
       const run = (cb) => {
         this.logger.debug("Publishing " + pkg.name + "...");
 
-        NpmUtilities.publishTaggedInDir("lerna-temp", pkg.location, (err) => {
+        NpmUtilities.publishTaggedInDir("asini-temp", pkg.location, (err) => {
           err = err && err.stack || err;
 
           if (!err ||
@@ -393,8 +393,8 @@ export default class PublishCommand extends Command {
         attempts++;
 
         try {
-          if (NpmUtilities.checkDistTag(pkg.name, "lerna-temp")) {
-            NpmUtilities.removeDistTag(pkg.name, "lerna-temp");
+          if (NpmUtilities.checkDistTag(pkg.name, "asini-temp")) {
+            NpmUtilities.removeDistTag(pkg.name, "asini-temp");
           }
 
           if (this.flags.npmTag) {

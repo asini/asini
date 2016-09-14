@@ -19,10 +19,10 @@ describe("Command", () => {
     });
   });
 
-  describe(".lernaVersion", () => {
+  describe(".asiniVersion", () => {
     it("should be added to the instance", () => {
       const command = new Command();
-      assert.deepEqual(command.lernaVersion, require("../package.json").version);
+      assert.deepEqual(command.asiniVersion, require("../package.json").version);
     });
   });
 

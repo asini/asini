@@ -42,7 +42,7 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["git add " + path.join(testDir, "lerna.json")] },
+          { args: ["git add " + path.join(testDir, "asini.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-1/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-2/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-3/package.json")] },
@@ -52,27 +52,27 @@ describe("PublishCommand", () => {
           { args: ["git tag v1.0.1"] }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
           // No package-5.  It's private.
         ], true],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@1.0.1 latest"] },
 
           // No package-5.  It's private.
@@ -87,8 +87,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json"), "utf-8"), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json"), "utf-8"), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
@@ -153,26 +153,26 @@ describe("PublishCommand", () => {
           { args: ["git tag package-4@1.1.0"] }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.1.0" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.1.0" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@1.1.0 latest"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 2.0.0" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 2.0.0" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@2.0.0 latest"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.1.0" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.1.0" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@1.1.0 latest"] },
 
           { args: ["git symbolic-ref --short HEAD"], returns: "master" },
@@ -185,7 +185,7 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.1.0");
@@ -233,28 +233,28 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
           { args: ["git checkout -- packages/*/package.json"] },
 
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@1.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@1.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@1.0.0-alpha.81e3b443 canary"] },
 
           { args: ["git symbolic-ref --short HEAD"], returns: "master" },
@@ -267,8 +267,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json"), "utf-8"), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.0\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json"), "utf-8"), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.0\"\n}\n");
 
           // The following wouldn't be the actual results of a canary release
           // because `git checkout --` would have removed the file changes.
@@ -322,28 +322,28 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
           { args: ["git checkout -- packages/*/package.json"] },
 
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 2.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 2.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@2.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 3.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 3.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@3.0.0-alpha.81e3b443 canary"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 4.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 4.0.0-alpha.81e3b443" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@4.0.0-alpha.81e3b443 canary"] },
 
           { args: ["git symbolic-ref --short HEAD"], returns: "master" },
@@ -356,7 +356,7 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
 
           // The following wouldn't be the actual results of a canary release
           // because `git checkout --` would have removed the file changes.
@@ -409,26 +409,26 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
         ], true],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@1.0.1 latest"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@1.0.1 latest"] }
         ]],
       ]);
@@ -437,8 +437,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json"), "utf-8"), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json"), "utf-8"), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
@@ -487,7 +487,7 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["git add " + path.join(testDir, "lerna.json")] },
+          { args: ["git add " + path.join(testDir, "asini.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-1/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-2/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-3/package.json")] },
@@ -502,8 +502,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json")), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json")), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
@@ -560,8 +560,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json")), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json")), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
@@ -610,7 +610,7 @@ describe("PublishCommand", () => {
           { args: ["Are you sure you want to publish the above changes?"], returns: true }
         ]],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["git add " + path.join(testDir, "lerna.json")] },
+          { args: ["git add " + path.join(testDir, "asini.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-1/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-2/package.json")] },
           { args: ["git add " + path.join(testDir, "packages/package-3/package.json")] },
@@ -620,27 +620,27 @@ describe("PublishCommand", () => {
           { args: ["git tag v1.0.1"] }
         ]],
         [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+          { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+          { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
           // No package-5.  It's private.
         ], true],
         [ChildProcessUtilities, "execSync", {}, [
-          { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-1 lerna-temp"] },
+          { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-1 asini-temp"] },
           { args: ["npm dist-tag add package-1@1.0.1 prerelease"] },
 
-          { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-2 lerna-temp"] },
+          { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-2 asini-temp"] },
           { args: ["npm dist-tag add package-2@1.0.1 prerelease"] },
 
-          { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-3 lerna-temp"] },
+          { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-3 asini-temp"] },
           { args: ["npm dist-tag add package-3@1.0.1 prerelease"] },
 
-          { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.0.1" + EOL + "stable: 1.0.0" },
-          { args: ["npm dist-tag rm package-4 lerna-temp"] },
+          { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.0.1" + EOL + "stable: 1.0.0" },
+          { args: ["npm dist-tag rm package-4 asini-temp"] },
           { args: ["npm dist-tag add package-4@1.0.1 prerelease"] },
 
           // No package-5.  It's private.
@@ -655,8 +655,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json"), "utf-8"), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json"), "utf-8"), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
@@ -715,7 +715,7 @@ describe("PublishCommand", () => {
          { args: ["Are you sure you want to publish the above changes?"], returns: true }
        ]],
        [ChildProcessUtilities, "execSync", {}, [
-         { args: ["git add " + path.join(testDir, "lerna.json")] },
+         { args: ["git add " + path.join(testDir, "asini.json")] },
          { args: ["git add " + path.join(testDir, "packages/package-1/package.json")] },
          { args: ["git add " + path.join(testDir, "packages/package-2/package.json")] },
          { args: ["git add " + path.join(testDir, "packages/package-3/package.json")] },
@@ -725,27 +725,27 @@ describe("PublishCommand", () => {
          { args: ["git tag v1.0.1"] }
        ]],
        [ChildProcessUtilities, "exec", { nodeCallback: true }, [
-         { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag lerna-temp"] },
-         { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag lerna-temp"] },
-         { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag lerna-temp"] },
-         { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag lerna-temp"] }
+         { args: ["cd " + path.join(testDir, "packages/package-1") + " && npm publish --tag asini-temp"] },
+         { args: ["cd " + path.join(testDir, "packages/package-2") + " && npm publish --tag asini-temp"] },
+         { args: ["cd " + path.join(testDir, "packages/package-3") + " && npm publish --tag asini-temp"] },
+         { args: ["cd " + path.join(testDir, "packages/package-4") + " && npm publish --tag asini-temp"] }
          // No package-5.  It's private.
        ], true],
        [ChildProcessUtilities, "execSync", {}, [
-         { args: ["npm dist-tag ls package-1"], returns: "lerna-temp: 1.0.1\nstable: 1.0.0" },
-         { args: ["npm dist-tag rm package-1 lerna-temp"] },
+         { args: ["npm dist-tag ls package-1"], returns: "asini-temp: 1.0.1\nstable: 1.0.0" },
+         { args: ["npm dist-tag rm package-1 asini-temp"] },
          { args: ["npm dist-tag add package-1@1.0.1 latest"] },
 
-         { args: ["npm dist-tag ls package-2"], returns: "lerna-temp: 1.0.1\nstable: 1.0.0" },
-         { args: ["npm dist-tag rm package-2 lerna-temp"] },
+         { args: ["npm dist-tag ls package-2"], returns: "asini-temp: 1.0.1\nstable: 1.0.0" },
+         { args: ["npm dist-tag rm package-2 asini-temp"] },
          { args: ["npm dist-tag add package-2@1.0.1 latest"] },
 
-         { args: ["npm dist-tag ls package-3"], returns: "lerna-temp: 1.0.1\nstable: 1.0.0" },
-         { args: ["npm dist-tag rm package-3 lerna-temp"] },
+         { args: ["npm dist-tag ls package-3"], returns: "asini-temp: 1.0.1\nstable: 1.0.0" },
+         { args: ["npm dist-tag rm package-3 asini-temp"] },
          { args: ["npm dist-tag add package-3@1.0.1 latest"] },
 
-         { args: ["npm dist-tag ls package-4"], returns: "lerna-temp: 1.0.1\nstable: 1.0.0" },
-         { args: ["npm dist-tag rm package-4 lerna-temp"] },
+         { args: ["npm dist-tag ls package-4"], returns: "asini-temp: 1.0.1\nstable: 1.0.0" },
+         { args: ["npm dist-tag rm package-4 asini-temp"] },
          { args: ["npm dist-tag add package-4@1.0.1 latest"] },
 
          // No package-5.  It's private.
@@ -760,8 +760,8 @@ describe("PublishCommand", () => {
         if (err) return done(err);
 
         try {
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
-          assert.equal(fs.readFileSync(path.join(testDir, "lerna.json")), "{\n  \"lerna\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(fs.readFileSync(path.join(testDir, "asini.json")), "{\n  \"asini\": \"__TEST_VERSION__\",\n  \"version\": \"1.0.1\"\n}\n");
 
           assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
           assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");

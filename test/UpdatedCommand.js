@@ -99,12 +99,12 @@ describe("UpdatedCommand", () => {
     });
 
     it("should list changes without ignored files", (done) => {
-      const lernaJsonLocation = path.join(testDir, "lerna.json");
-      const lernaJson = JSON.parse(fs.readFileSync(lernaJsonLocation));
-      lernaJson.publishConfig = {
+      const asiniJsonLocation = path.join(testDir, "asini.json");
+      const asiniJson = JSON.parse(fs.readFileSync(asiniJsonLocation));
+      asiniJson.publishConfig = {
         ignore: ["ignored-file"]
       };
-      fs.writeFileSync(lernaJsonLocation, JSON.stringify(lernaJson, null, 2));
+      fs.writeFileSync(asiniJsonLocation, JSON.stringify(asiniJson, null, 2));
 
       execSync("git tag v1.0.0");
       execSync("touch " + path.join(testDir, "packages/package-2/ignored-file"));
@@ -240,12 +240,12 @@ describe("UpdatedCommand", () => {
     });
 
     it("should list changes without ignored files", (done) => {
-      const lernaJsonLocation = path.join(testDir, "lerna.json");
-      const lernaJson = JSON.parse(fs.readFileSync(lernaJsonLocation));
-      lernaJson.publishConfig = {
+      const asiniJsonLocation = path.join(testDir, "asini.json");
+      const asiniJson = JSON.parse(fs.readFileSync(asiniJsonLocation));
+      asiniJson.publishConfig = {
         ignore: ["ignored-file"]
       };
-      fs.writeFileSync(lernaJsonLocation, JSON.stringify(lernaJson, null, 2));
+      fs.writeFileSync(asiniJsonLocation, JSON.stringify(asiniJson, null, 2));
 
       execSync("git tag v1.0.0");
       execSync("touch " + path.join(testDir, "packages/package-2/ignored-file"));

@@ -96,7 +96,7 @@ export default class ImportCommand extends Command {
         .replace(/^(diff --git a)/mg,     replacement)
         .replace(/^(diff --git \S+ b)/mg, replacement);
 
-      // Apply the modified patch to the current lerna repository, preserving
+      // Apply the modified patch to the current Asini repository, preserving
       // original commit date, author and message.
       //
       // Fall back to three-way merge, which can help with duplicate commits

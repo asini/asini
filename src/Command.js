@@ -13,7 +13,7 @@ export default class Command {
     this.input = input;
     this.flags = flags;
 
-    this.lernaVersion = require("../package.json").version;
+    this.asiniVersion = require("../package.json").version;
     this.logger = logger;
     this.repository = new Repository();
     this.progressBar = progressBar;
@@ -21,7 +21,7 @@ export default class Command {
   }
 
   run() {
-    this.logger.info("Lerna v" + this.lernaVersion);
+    this.logger.info("Asini v" + this.asiniVersion);
 
     if (this.repository.isIndependent()) {
       this.logger.info("Independent Versioning Mode");
@@ -40,27 +40,27 @@ export default class Command {
     }
 
     if (!FileSystemUtilities.existsSync(this.repository.packagesLocation)) {
-      this.logger.warning("`packages/` directory does not exist, have you run `lerna init`?");
+      this.logger.warning("`packages/` directory does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
     if (!FileSystemUtilities.existsSync(this.repository.packageJsonLocation)) {
-      this.logger.warning("`package.json` does not exist, have you run `lerna init`?");
+      this.logger.warning("`package.json` does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
-    if (!FileSystemUtilities.existsSync(this.repository.lernaJsonLocation)) {
-      this.logger.warning("`lerna.json` does not exist, have you run `lerna init`?");
+    if (!FileSystemUtilities.existsSync(this.repository.asiniJsonLocation)) {
+      this.logger.warning("`asini.json` does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
     if (this.flags.independent && !this.repository.isIndependent()) {
       this.logger.warning(
-        "You ran lerna with `--independent` or `-i`, but the repository is not set to independent mode. " +
-        "To use independent mode you need to set your `lerna.json` \"version\" to \"independent\". " +
+        "You ran asini with `--independent` or `-i`, but the repository is not set to independent mode. " +
+        "To use independent mode you need to set your `asini.json` \"version\" to \"independent\". " +
         "Then you won't need to pass the `--independent` or `-i` flags."
       );
       this._complete(null, 1);
@@ -69,12 +69,12 @@ export default class Command {
 
     if (
       process.env.NODE_ENV !== "test" &&
-      this.lernaVersion !== this.repository.lernaVersion
+      this.asiniVersion !== this.repository.asiniVersion
     ) {
       this.logger.warning(
-        `Lerna version mismatch: The current version of lerna is ${this.lernaVersion}, ` +
-        `but the Lerna version in \`lerna.json\` is ${this.repository.lernaVersion}. ` +
-        `You can either run \`lerna init\` again or install \`lerna@${this.repository.lernaVersion}\`.`
+        `Asini version mismatch: The current version of asini is ${this.asiniVersion}, ` +
+        `but the Asini version in \`asini.json\` is ${this.repository.asiniVersion}. ` +
+        `You can either run \`asini init\` again or install \`asini@${this.repository.asiniVersion}\`.`
       );
       this._complete(null, 1);
       return;
@@ -87,13 +87,13 @@ export default class Command {
     }
 
     if (process.env.NPM_DIST_TAG !== undefined) {
-      this.logger.warning("`NPM_DIST_TAG=[tagname] lerna publish` is deprecated, please use `lerna publish --tag [tagname]` instead.");
+      this.logger.warning("`NPM_DIST_TAG=[tagname] asini publish` is deprecated, please use `asini publish --tag [tagname]` instead.");
       this._complete(null, 1);
       return;
     }
 
     if (process.env.FORCE_VERSION !== undefined) {
-      this.logger.warning("`FORCE_VERSION=[package/*] lerna updated/publish` is deprecated, please use `lerna updated/publish --force-publish [package/*]` instead.");
+      this.logger.warning("`FORCE_VERSION=[package/*] asini updated/publish` is deprecated, please use `asini updated/publish --force-publish [package/*]` instead.");
       this._complete(null, 1);
       return;
     }

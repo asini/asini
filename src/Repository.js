@@ -11,15 +11,15 @@ export default class Repository {
     }
 
     this.rootPath = path.resolve(GitUtilities.getTopLevelDirectory());
-    this.lernaJsonLocation = path.join(this.rootPath, "lerna.json");
+    this.asiniJsonLocation = path.join(this.rootPath, "asini.json");
     this.packageJsonLocation = path.join(this.rootPath, "package.json");
     this.packagesLocation = path.join(this.rootPath, "packages");
 
     // Legacy
     this.versionLocation = path.join(this.rootPath, "VERSION");
 
-    if (FileSystemUtilities.existsSync(this.lernaJsonLocation)) {
-      this.lernaJson = JSON.parse(FileSystemUtilities.readFileSync(this.lernaJsonLocation));
+    if (FileSystemUtilities.existsSync(this.asiniJsonLocation)) {
+      this.asiniJson = JSON.parse(FileSystemUtilities.readFileSync(this.asiniJsonLocation));
     }
 
     if (FileSystemUtilities.existsSync(this.packageJsonLocation)) {
@@ -27,20 +27,20 @@ export default class Repository {
     }
   }
 
-  get lernaVersion() {
-    return this.lernaJson && this.lernaJson.lerna;
+  get asiniVersion() {
+    return this.asiniJson && this.asiniJson.asini;
   }
 
   get version() {
-    return this.lernaJson && this.lernaJson.version;
+    return this.asiniJson && this.asiniJson.version;
   }
 
   get publishConfig() {
-    return this.lernaJson && this.lernaJson.publishConfig || {};
+    return this.asiniJson && this.asiniJson.publishConfig || {};
   }
 
   get bootstrapConfig() {
-    return this.lernaJson && this.lernaJson.bootstrapConfig || {};
+    return this.asiniJson && this.asiniJson.bootstrapConfig || {};
   }
 
   isIndependent() {

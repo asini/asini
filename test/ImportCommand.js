@@ -43,7 +43,7 @@ describe("ImportCommand", () => {
         try {
           const lastCommit = ChildProcessUtilities.execSync("git log --format=\"%s\"", {encoding:"utf8"}).split("\n")[0];
           const packageJson = path.join(testDir, "packages", path.basename(externalDir), "package.json");
-          assert.ok(!pathExists.sync(path.join(testDir, "lerna-debug.log")));
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
           assert.ok(pathExists.sync(packageJson));
           assert.equal(lastCommit, "Init external commit");
           done();

@@ -1,16 +1,5 @@
 <p align="center">
-  <img alt="Lerna" src="https://cloud.githubusercontent.com/assets/952783/15271604/6da94f96-1a06-11e6-8b04-dc3171f79a90.png" width="480">
-</p>
-
-<p align="center">
   A tool for managing JavaScript projects with multiple packages.
-</p>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/lerna"><img alt="NPM Status" src="https://img.shields.io/npm/v/lerna.svg?style=flat"></a>
-  <a href="https://travis-ci.org/lerna/lerna"><img alt="Travis Status" src="https://img.shields.io/travis/lerna/lerna/master.svg?style=flat&label=travis"></a>
-  <a href="https://ci.appveyor.com/project/hzoo/lerna"><img alt="Appveyor Status" src="https://img.shields.io/appveyor/ci/hzoo/lerna.svg"></a>
-  <a href="https://slack.lernajs.io/"><img alt="Slack Status" src="https://slack.lernajs.io/badge.svg"></a>
 </p>
 
 ## About
@@ -25,15 +14,15 @@ codebases into multi-package repositories (sometimes called [monorepos](https://
 [Ember](https://github.com/emberjs/ember.js/tree/master/packages), [Meteor](https://github.com/meteor/meteor/tree/devel/packages), [Jest](https://github.com/facebook/jest/tree/master/packages), and many others develop all of their packages within a
 single repository.
 
-**Lerna is a tool that optimizes the workflow around managing multi-package
+**Asini is a tool that optimizes the workflow around managing multi-package
 repositories with git and npm.**
 
-### What does a Lerna repo look like?
+### What does an Asini repo look like?
 
 There's actually very little to it. You have a file system that looks like this:
 
 ```
-my-lerna-repo/
+my-asini-repo/
   package.json
   packages/
     package-1/
@@ -42,122 +31,105 @@ my-lerna-repo/
       package.json
 ```
 
-### What can Lerna do?
+### What can Asini do?
 
-The two primary commands in Lerna are `lerna bootstrap` and `lerna publish`.
+The two primary commands in Asini are `asini bootstrap` and `asini publish`.
 
 `bootstrap` will link dependencies in the repo together.
 `publish` will help publish any updated packages.
 
 ## Getting Started
 
-> The instructions below are for Lerna 2.x which is currently in beta.
-> We recommend using it instead of 1.x for a new Lerna project. Check the [wiki](https://github.com/lerna/lerna/wiki/1.x-Docs) if you need to see the 1.x README.
-
-Let's start by installing Lerna globally with [npm](https://www.npmjs.com/).
+Let's start by installing Asini globally with [npm](https://www.npmjs.com/).
 
 ```sh
-# install the latest 2.x version using the `prerelease` dist-tag
-$ npm install --global lerna@prerelease
-# install version directly
-$ npm install --global lerna@^2.0.0-beta
+$ npm install -g asini
 ```
 
 Next we'll create a new [git](https://git-scm.com/) repository:
 
 ```sh
-$ git init lerna-repo
-$ cd lerna-repo
+$ git init asini-repo
+$ cd asini-repo
 ```
 
-And now let's turn it into a Lerna repo:
+And now let's turn it into an Asini repo:
 
 ```sh
-$ lerna init
+$ asini init
 ```
 
 Your repository should now look like this:
 
 ```
-lerna-repo/
+asini-repo/
   packages/
   package.json
-  lerna.json
+  asini.json
 ```
 
-This will create a `lerna.json` configuration file as well as a `packages` folder.
+This will create an `asini.json` configuration file as well as a `packages` folder.
 
 ## How it works
 
-Lerna allows you to manage your project using one of two modes: Fixed or Independent.
+Asini allows you to manage your project using one of two modes: Fixed or Independent.
 
 ### Fixed/Locked mode (default)
 
-Fixed mode Lerna projects operate on a single version line. The version is kept in the `lerna.json` file at the root of your project under the `version` key. When you run `lerna publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
+Fixed mode Asini projects operate on a single version line. The version is kept in the `asini.json` file at the root of your project under the `version` key. When you run `asini publish`, if a module has been updated since the last time a release was made, it will be updated to the new version you're releasing. This means that you only publish a new version of a package when you need to.
 
 This is the mode that [Babel](https://github.com/babel/babel) is currently using. Use this if you want to automatically tie all package versions together. One issue with this approach is that a major change in any package will result in all packages having a new major version.
 
 ### Independent mode (`--independent`)
 
-Independent mode Lerna projects allows maintainers to increment package versions independently of each other. Each time you publish, you will get a prompt for each package that has changed to specify if it's a patch, minor, major or custom change.
+Independent mode Asini projects allows maintainers to increment package versions independently of each other. Each time you publish, you will get a prompt for each package that has changed to specify if it's a patch, minor, major or custom change.
 
-Independent mode allows you to more specifically update versions for each package and makes sense for a group of components. Combining this mode with something like [semantic-release](https://github.com/semantic-release/semantic-release) would make it less painful. (There is work on this already at [atlassian/lerna-semantic-release](https://github.com/atlassian/lerna-semantic-release).
+Independent mode allows you to more specifically update versions for each package and makes sense for a group of components. Combining this mode with something like [semantic-release](https://github.com/semantic-release/semantic-release) would make it less painful.
 
-> The `version` key in `lerna.json` is ignored in independent mode.
+> The `version` key in `asini.json` is ignored in independent mode.
 
 ## Commands
 
 ### init
 
 ```sh
-$ lerna init
+$ asini init
 ```
 
-Create a new Lerna repo or upgrade an existing repo to the current version of Lerna.
+Create a new Asini repo or upgrade an existing repo to the current version of Asini.
 
-> Lerna assumes the repo has already been initialized with `git init`.
+> Asini assumes the repo has already been initialized with `git init`.
 
 When run, this command will:
-1. Add `lerna` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
-2. Create a `lerna.json` config file to store the `version` number.
+1. Add `asini` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
+2. Create an `asini.json` config file to store the `version` number.
 3. Create a `packages` directory if it hasn't been created already.
-
-Example output on a new git repo:
-
-```sh
-> lerna init
-$ Lerna v2.0.0-beta.18
-$ Creating packages directory.
-$ Updating package.json.
-$ Creating lerna.json.
-$ Successfully created Lerna files
-```
 
 #### --independent, -i
 
 ```sh
-$ lerna publish --independent
+$ asini publish --independent
 ```
 
-This flag tells Lerna to use independent versioning mode.
+This flag tells Asini to use independent versioning mode.
 
 ### bootstrap
 
 ```sh
-$ lerna bootstrap
+$ asini bootstrap
 ```
 
-Bootstrap the packages in the current Lerna repo.
+Bootstrap the packages in the current Asini repo.
 Installs all of their dependencies and links any cross-dependencies.
 
 When run, this command will:
 
 1. `npm install` all external dependencies of each package.
-2. Symlink together all Lerna `packages` that are dependencies of each other.
+2. Symlink together all Asini `packages` that are dependencies of each other.
     * This requires Administrator privileges on Windows
 2. `npm prepublish` all bootstrapped packages.
 
-`lerna bootstrap` respects the `--ignore` flag (see below).
+`asini bootstrap` respects the `--ignore` flag (see below).
 
 #### How `bootstrap` works
 
@@ -180,7 +152,7 @@ Let's use `babel` as an example.
 }
 ```
 
-- Lerna checks if each dependency is also part of the Lerna repo.
+- Asini checks if each dependency is also part of the Asini repo.
   - In this example, `babel-generator` is a dependency, while `source-map` is not.
   - `source-map` is `npm install`ed like normal.
 - `packages/babel-core/node_modules/babel-generator` symlinks to `packages/babel-generator`
@@ -193,10 +165,10 @@ Let's use `babel` as an example.
 ### publish
 
 ```sh
-$ lerna publish
+$ asini publish
 ```
 
-Publish packages in the current Lerna project. When run, this command does the following:
+Publish packages in the current Asini project. When run, this command does the following:
 
 Creates a new release of the packages that have been updated.
 Prompts for a new version.
@@ -204,23 +176,23 @@ Creates a new git commit/tag in the process of publishing to npm.
 
 More specifically, this command will:
 
-1. Publish each module in `packages` that has been updated since the last version to npm with the [dist-tag](https://docs.npmjs.com/cli/dist-tag) `lerna-temp`.
-  1. Run the equivalent of `lerna updated` to determine which packages need to be published.
-  2. If necessary, increment the `version` key in `lerna.json`.
+1. Publish each module in `packages` that has been updated since the last version to npm with the [dist-tag](https://docs.npmjs.com/cli/dist-tag) `asini-temp`.
+  1. Run the equivalent of `asini updated` to determine which packages need to be published.
+  2. If necessary, increment the `version` key in `asini.json`.
   3. Update the `package.json` of all updated packages to their new versions.
   4. Update all dependencies of the updated packages with the new versions.
   5. Create a new git commit and tag for the new version.
   6. Publish updated packages to npm.
-2. Once all packages have been published, remove the `lerna-temp` tags and add the tags to `latest`.
+2. Once all packages have been published, remove the `asini-temp` tags and add the tags to `latest`.
 
 > A temporary dist-tag is used at the start to prevent the case where only some of the packages are published; this can cause issues for users installing a package that only has some updated packages.
 
-> Lerna won't publish packages which are marked as private (`"private": true` in the `package.json`).
+> Asini won't publish packages which are marked as private (`"private": true` in the `package.json`).
 
 #### --npm-tag [tagname]
 
 ```sh
-$ lerna publish --npm-tag=next
+$ asini publish --npm-tag=next
 ```
 
 When run with this flag, `publish` will publish to npm with the given npm [dist-tag](https://docs.npmjs.com/cli/dist-tag) (defaults to `latest`).
@@ -233,7 +205,7 @@ This option can be used to publish a [`prerelease`](http://carrot.is/coding/npm_
 #### --canary, -c
 
 ```sh
-$ lerna publish --canary
+$ asini publish --canary
 ```
 
 When run with this flag, `publish` publishes packages in a more granular way (per commit). Before publishing to npm, it creates the new `version` tag by taking the current `version` and appending the current git sha (ex: `1.0.0-alpha.81e3b443`).
@@ -243,7 +215,7 @@ When run with this flag, `publish` publishes packages in a more granular way (pe
 #### --skip-git
 
 ```sh
-$ lerna publish --skip-git
+$ asini publish --skip-git
 ```
 
 When run with this flag, `publish` will publish to npm without running any of the git commands.
@@ -253,7 +225,7 @@ When run with this flag, `publish` will publish to npm without running any of th
 #### --skip-npm
 
 ```sh
-$ lerna publish --skip-npm
+$ asini publish --skip-npm
 ```
 
 When run with this flag, `publish` will update all `package.json` package
@@ -262,7 +234,7 @@ packages to npm.
 
 This is useful as a workaround for an [npm
 issue](https://github.com/npm/registry/issues/42) which prevents README updates
-from appearing on npmjs.com when published via Lerna.  When publishing with
+from appearing on npmjs.com when published via Asini.  When publishing with
 README changes, use `--skip-npm` and do the final `npm publish` by hand for
 each package.
 
@@ -274,19 +246,19 @@ dependencies, without committing, tagging, pushing or publishing.
 #### --force-publish [packages]
 
 ```sh
-$ lerna publish --force-publish=package-2,package-4
+$ asini publish --force-publish=package-2,package-4
 # force publish all packages
-$ lerna publish --force-publish=*
+$ asini publish --force-publish=*
 ```
 
 When run with this flag, `publish` will force publish the specified packages (comma-separated) or all packages using `*`.
 
-> This will skip the `lerna updated` check for changed packages and forces a package that didn't have a `git diff` change to be updated.
+> This will skip the `asini updated` check for changed packages and forces a package that didn't have a `git diff` change to be updated.
 
 #### --yes
 
 ```sh
-$ lerna publish --canary --yes
+$ asini publish --canary --yes
 # skips `Are you sure you want to publish the above changes?`
 ```
 
@@ -296,7 +268,7 @@ Useful in [Continuous integration (CI)](https://en.wikipedia.org/wiki/Continuous
 #### --repo-version
 
 ```sh
-$ lerna publish --repo-version 1.0.1
+$ asini publish --repo-version 1.0.1
 # applies version and skips `Select a new version for...` prompt
 ```
 
@@ -306,17 +278,17 @@ Useful for bypassing the user input prompt if you already know which version to 
 ### updated
 
 ```sh
-$ lerna updated
+$ asini updated
 ```
 
 Check which `packages` have changed since the last release (the last git tag).
 
-Lerna determines the last git tag created and runs `git diff --name-only v6.8.1` to get all files changed since that tag. It then returns an array of packages that have an updated file.
+Asini determines the last git tag created and runs `git diff --name-only v6.8.1` to get all files changed since that tag. It then returns an array of packages that have an updated file.
 
 ### clean
 
 ```sh
-$ lerna clean
+$ asini clean
 ```
 
 Remove the `node_modules` directory from all packages.
@@ -324,59 +296,59 @@ Remove the `node_modules` directory from all packages.
 ### diff
 
 ```sh
-$ lerna diff [package?]
+$ asini diff [package?]
 
-$ lerna diff
+$ asini diff
 # diff a specific package
-$ lerna diff package-name
+$ asini diff package-name
 ```
 
 Diff all packages or a single package since the last release.
 
-> Similar to `lerna updated`. This command runs `git diff`.
+> Similar to `asini updated`. This command runs `git diff`.
 
 ### ls
 
 ```sh
-$ lerna ls
+$ asini ls
 ```
 
-List all of the public packages in the current Lerna repo.
+List all of the public packages in the current Asini repo.
 
 ### run
 
 ```sh
-$ lerna run [script] # runs npm run my-script in all packages that have it
-$ lerna run test
-$ lerna run build
+$ asini run [script] # runs npm run my-script in all packages that have it
+$ asini run test
+$ asini run build
 ```
 
 Run an [npm script](https://docs.npmjs.com/misc/scripts) in each package that contains that script.
 
-`lerna run` respects the `--concurrency` flag (see below).
+`asini run` respects the `--concurrency` flag (see below).
 
-`lerna run` respects the `--scope` flag (see below).
+`asini run` respects the `--scope` flag (see below).
 
 ```sh
-$ lerna run --scope my-component test
+$ asini run --scope my-component test
 ```
 
 ### exec
 
 ```sh
-$ lerna exec -- [command] # runs the command in all packages
-$ lerna exec -- rm -rf ./node_modules
-$ lerna exec -- protractor conf.js
+$ asini exec -- [command] # runs the command in all packages
+$ asini exec -- rm -rf ./node_modules
+$ asini exec -- protractor conf.js
 ```
 
 Run an arbitrary command in each package.
 
-`lerna exec` respects the `--concurrency` flag (see below).
+`asini exec` respects the `--concurrency` flag (see below).
 
-`lerna exec` respects the `--scope` flag (see below).
+`asini exec` respects the `--scope` flag (see below).
 
 ```sh
-$ lerna exec --scope my-component -- ls -la
+$ asini exec --scope my-component -- ls -la
 ```
 
 > Hint: The commands are spawned in parallel, using the concurrency given.
@@ -384,37 +356,37 @@ $ lerna exec --scope my-component -- ls -la
 > If you want to run the command in one package after another, use it like this:
 
 ```sh
-$ lerna exec --concurrency 1 -- ls -la
+$ asini exec --concurrency 1 -- ls -la
 ```
 
 ### import
 
 ```sh
-$ lerna import <path-to-external-repository>
+$ asini import <path-to-external-repository>
 ```
 
 Import the package at `<path-to-external-repository>`, with commit history,
 into `packages/<directory-name>`.  Original commit authors, dates and messages
 are preserved.  Commits are applied to the current branch.
 
-This is useful for gathering pre-existing standalone packages into a Lerna
+This is useful for gathering pre-existing standalone packages into an Asini
 repo.  Each commit is modified to make changes relative to the package
 directory.  So, for example, the commit that added `package.json` will
 instead add `packages/<directory-name>/package.json`.
 
 ## Misc
 
-Lerna will log to a `lerna-debug.log` file (same as `npm-debug.log`) when it encounters an error running a command.
+Asini will log to a `asini-debug.log` file (same as `npm-debug.log`) when it encounters an error running a command.
 
-Lerna also has support for [scoped packages](https://docs.npmjs.com/misc/scope).
+Asini also has support for [scoped packages](https://docs.npmjs.com/misc/scope).
 
-Running `lerna` without arguments will show all commands/options.
+Running `asini` without arguments will show all commands/options.
 
-### lerna.json
+### asini.json
 
 ```js
 {
-  "lerna": "2.0.0-beta.18",
+  "asini": "x.x.x",
   "version": "1.1.3",
   "publishConfig": {
     "ignore": [
@@ -428,14 +400,14 @@ Running `lerna` without arguments will show all commands/options.
 }
 ```
 
-- `lerna`: the current version of Lerna being used.
+- `asini`: the current version of Asini being used.
 - `version`: the current version of the repository.
-- `publishConfig.ignore`: an array of globs that won't be included in `lerna updated/publish`. Use this to prevent publishing a new version unnecessarily for changes, such as fixing a `README.md` typo.
+- `publishConfig.ignore`: an array of globs that won't be included in `asini updated/publish`. Use this to prevent publishing a new version unnecessarily for changes, such as fixing a `README.md` typo.
 - `linkedFiles.prefix`: a prefix added to linked dependency files.
 
 ### Common `devDependencies`
 
-Most `devDependencies` can be pulled up to the root of a Lerna repo.
+Most `devDependencies` can be pulled up to the root of an Asini repo.
 
 This has a few benefits:
 
@@ -448,7 +420,7 @@ Note that `devDependencies` providing "binary" executables that are used by
 npm scripts still need to be installed directly in each package where they're
 used.
 
-For example the `nsp` dependency is necessary in this case for `lerna run nsp`
+For example the `nsp` dependency is necessary in this case for `asini run nsp`
 (and `npm run nsp` within the package's directory) to work correctly:
 
 ```json
@@ -467,10 +439,10 @@ For example the `nsp` dependency is necessary in this case for `lerna run nsp`
 
 #### --concurrency
 
-How many threads to use when Lerna parallelizes the tasks (defaults to `4`)
+How many threads to use when Asini parallelizes the tasks (defaults to `4`)
 
 ```sh
-$ lerna publish --concurrency 1
+$ asini publish --concurrency 1
 ```
 
 #### --scope [glob]
@@ -478,11 +450,11 @@ $ lerna publish --concurrency 1
 Scopes a command to a subset of packages.
 
 ```sh
-$ lerna exec --scope my-component -- ls -la
+$ asini exec --scope my-component -- ls -la
 ```
 
 ```sh
-$ lerna run --scope toolbar-* test
+$ asini run --scope toolbar-* test
 ```
 
 #### --ignore [glob]
@@ -490,10 +462,10 @@ $ lerna run --scope toolbar-* test
 Excludes a subset of packages when running the `bootstrap` command.
 
 ```sh
-$ lerna bootstrap --ignore component-*
+$ asini bootstrap --ignore component-*
 ```
 
-The `ignore` flag, when used with the `bootstrap` command, can also be set in `lerna.json` under the `bootstrapConfig` key. The command-line flag will take precendence over this option. This flag is supported in `bootstrap` and `exec` commands.
+The `ignore` flag, when used with the `bootstrap` command, can also be set in `asini.json` under the `bootstrapConfig` key. The command-line flag will take precendence over this option. This flag is supported in `bootstrap` and `exec` commands.
 
 **Note**: If both `scope` and `ignore` are provided to `exec` command, `scope` takes precedence.
 
@@ -501,7 +473,7 @@ The `ignore` flag, when used with the `bootstrap` command, can also be set in `l
 
 ```javascript
 {
-  "lerna": "2.0.0-beta.16",
+  "asini": "x.x.x",
   "version": "0.0.0",
   "bootstrapConfig": {
     "ignore": "component-*"
@@ -519,8 +491,8 @@ Only will bump versions for packages that have been updated explicitly rather th
 > This may not make sense for a major version bump since other packages that depend on the updated packages wouldn't be updated.
 
 ```sh
-$ lerna updated --only-explicit-updates
-$ lerna publish --only-explicit-updates
+$ asini updated --only-explicit-updates
+$ asini publish --only-explicit-updates
 ```
 
 Ex: in Babel, `babel-types` is depended upon by all packages in the monorepo (over 100). However, Babel uses `^` for most of it's dependencies so it isn't necessary to bump the versions of all packages if only `babel-types` is updated. This option allows only the packages that have been explicitly updated to make a new version.
