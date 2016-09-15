@@ -2,6 +2,11 @@
   A tool for managing JavaScript projects with multiple packages.
 </p>
 
+<p align="center">
+  <a href="https://www.npmjs.com/package/asini"><img alt="NPM Status" src="https://img.shields.io/npm/v/asini.svg?style=flat"></a>
+  <a href="https://travis-ci.org/asini/asini"><img alt="Travis Status" src="https://img.shields.io/travis/asini/asini/master.svg?style=flat&label=travis"></a>
+</p>
+
 ## About
 
 Splitting up large codebases into separate independently versioned packages
