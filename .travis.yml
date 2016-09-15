@@ -18,5 +18,3 @@ before_script:
   - git config --global user.name "Tester McPerson"
 script: npm run ci
 
-notifications:
-  slack: lernajs:qHyrojRoqBBu7OhDyX1OMiHQ
