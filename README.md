@@ -17,6 +17,8 @@ single repository.
 **Asini is a tool that optimizes the workflow around managing multi-package
 repositories with git and npm.**
 
+Asini is a fork of [Lerna](https://github.com/lerna/lerna).
+
 ### What does an Asini repo look like?
 
 There's actually very little to it. You have a file system that looks like this:
