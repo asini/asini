@@ -56,6 +56,17 @@ export default class PackageUtilities {
     return new PackageGraph(packages);
   }
 
+  static getFilteredPackages(packages, {scope, ignore}) {
+    packages = packages.slice();
+    if (scope) {
+      packages = PackageUtilities.filterPackages(packages, scope);
+    }
+    if (ignore) {
+      packages = PackageUtilities.filterPackages(packages, ignore, true);
+    }
+    return packages;
+  }
+
   /**
   * Filters a given set of packages and returns the one matching the given glob
   *

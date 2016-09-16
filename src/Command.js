@@ -94,9 +94,10 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.repository.buildPackageGraph();
+      this.repository.buildPackageGraph(this.flags);
       this.packages = this.repository.packages;
       this.packageGraph = this.repository.packageGraph;
+      this.filteredPackages = this.repository.filteredPackages;
     } catch (err) {
       this.logger.error("Errored while collecting packages and package graph", err);
       this._complete(null, 1);
