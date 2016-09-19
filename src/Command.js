@@ -34,31 +34,31 @@ export default class Command {
 
   runValidations() {
     if (this.concurrency < 1) {
-      this.logger.warning("command must be run with at least one thread.");
+      this.logger.warn("command must be run with at least one thread.");
       this._complete(null, 1);
       return;
     }
 
     if (!FileSystemUtilities.existsSync(this.repository.packagesLocation)) {
-      this.logger.warning("`packages/` directory does not exist, have you run `asini init`?");
+      this.logger.warn("`packages/` directory does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
     if (!FileSystemUtilities.existsSync(this.repository.packageJsonLocation)) {
-      this.logger.warning("`package.json` does not exist, have you run `asini init`?");
+      this.logger.warn("`package.json` does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
     if (!FileSystemUtilities.existsSync(this.repository.asiniJsonLocation)) {
-      this.logger.warning("`asini.json` does not exist, have you run `asini init`?");
+      this.logger.warn("`asini.json` does not exist, have you run `asini init`?");
       this._complete(null, 1);
       return;
     }
 
     if (this.flags.independent && !this.repository.isIndependent()) {
-      this.logger.warning(
+      this.logger.warn(
         "You ran asini with `--independent` or `-i`, but the repository is not set to independent mode. " +
         "To use independent mode you need to set your `asini.json` \"version\" to \"independent\". " +
         "Then you won't need to pass the `--independent` or `-i` flags."
@@ -71,7 +71,7 @@ export default class Command {
       process.env.NODE_ENV !== "test" &&
       this.asiniVersion !== this.repository.asiniVersion
     ) {
-      this.logger.warning(
+      this.logger.warn(
         `Asini version mismatch: The current version of asini is ${this.asiniVersion}, ` +
         `but the Asini version in \`asini.json\` is ${this.repository.asiniVersion}. ` +
         `You can either run \`asini init\` again or install \`asini@${this.repository.asiniVersion}\`.`
@@ -81,19 +81,19 @@ export default class Command {
     }
 
     if (FileSystemUtilities.existsSync(this.repository.versionLocation)) {
-      this.logger.warning("You have a `VERSION` file in your repository, this is leftover from a previous ");
+      this.logger.warn("You have a `VERSION` file in your repository, this is leftover from a previous ");
       this._complete(null, 1);
       return;
     }
 
     if (process.env.NPM_DIST_TAG !== undefined) {
-      this.logger.warning("`NPM_DIST_TAG=[tagname] asini publish` is deprecated, please use `asini publish --tag [tagname]` instead.");
+      this.logger.warn("`NPM_DIST_TAG=[tagname] asini publish` is deprecated, please use `asini publish --tag [tagname]` instead.");
       this._complete(null, 1);
       return;
     }
 
     if (process.env.FORCE_VERSION !== undefined) {
-      this.logger.warning("`FORCE_VERSION=[package/*] asini updated/publish` is deprecated, please use `asini updated/publish --force-publish [package/*]` instead.");
+      this.logger.warn("`FORCE_VERSION=[package/*] asini updated/publish` is deprecated, please use `asini updated/publish --force-publish [package/*]` instead.");
       this._complete(null, 1);
       return;
     }
@@ -122,17 +122,17 @@ export default class Command {
     const methodName = `${this.constructor.name}.${method}`;
 
     try {
-      this.logger.debug(`Attempting running ${methodName}`);
+      this.logger.verbose(`Attempting running ${methodName}`);
 
       this[method]((err, completed) => {
         if (err) {
           this.logger.error(`Errored while running ${methodName}`, err);
           this._complete(err, 1, callback);
         } else if (!completed) {
-          this.logger.debug(`Exited early while running ${methodName}`);
+          this.logger.verbose(`Exited early while running ${methodName}`);
           this._complete(null, 1, callback);
         } else {
-          this.logger.debug(`Successfully ran ${methodName}`);
+          this.logger.verbose(`Successfully ran ${methodName}`);
           next();
         }
       });
