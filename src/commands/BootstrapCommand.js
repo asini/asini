@@ -28,7 +28,6 @@ export default class BootstrapCommand extends Command {
    * @param {Function} callback
    */
   bootstrapPackages(callback) {
-    this.filteredPackages = this.getPackages();
     this.filteredGraph = PackageUtilities.getPackageGraph(this.filteredPackages);
     this.logger.info(`Bootstrapping ${this.filteredPackages.length} packages`);
     async.series([
@@ -39,18 +38,6 @@ export default class BootstrapCommand extends Command {
       // prepublish bootstrapped packages
       (cb) => this.prepublishPackages(cb)
     ], callback);
-  }
-
-  /**
-   * Get packages to bootstrap
-   * @returns {Array.<Package>}
-   */
-  getPackages() {
-    const ignore = this.flags.ignore || this.repository.bootstrapConfig.ignore;
-    if (ignore) {
-      this.logger.info(`Ignoring packages that match '${ignore}'`);
-    }
-    return PackageUtilities.filterPackages(this.packages, ignore, true);
   }
 
   /**

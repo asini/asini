@@ -151,6 +151,7 @@ export default class UpdatedPackagesCollector {
       return file.replace(folder + path.sep, "");
     });
 
+    // TODO: Ugh... something about this.
     if (this.publishConfig.ignore) {
       changedFiles = changedFiles.filter((file) => {
         return !find(this.publishConfig.ignore, (pattern) => {
