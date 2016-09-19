@@ -30,11 +30,13 @@ class Logger {
   }
 
   _log(type, style, level, message, error) {
-    this.logs.push({
-      type,
-      message,
-      error
-    });
+    if (process.env.NODE_ENV !== "test") {
+      this.logs.push({
+        type,
+        message,
+        error
+      });
+    }
 
     if (level < this.loglevel) {
       return;
