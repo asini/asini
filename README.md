@@ -70,7 +70,6 @@ Your repository should now look like this:
 
 ```
 asini-repo/
-  packages/
   package.json
   asini.json
 ```
@@ -110,7 +109,6 @@ Create a new Asini repo or upgrade an existing repo to the current version of As
 When run, this command will:
 1. Add `asini` as a [`devDependency`](https://docs.npmjs.com/files/package.json#devdependencies) in `package.json` if it doesn't already exist.
 2. Create an `asini.json` config file to store the `version` number.
-3. Create a `packages` directory if it hasn't been created already.
 
 #### --independent, -i
 
