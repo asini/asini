@@ -18,3 +18,8 @@ test_script:
 
 # Don't actually build.
 build: off
+
+notifications:
+  - provider: Slack
+    incoming_webhook:
+      secure: "in+scOGov0C+4+TOtI66odvLe0yGUlmm/y4r+F1U6l/Zo9+m84idfiL2G5dvAQb39Na36z+CyC5FAx/6EcKQm/9KXU28txOab25Ke5havKs="
