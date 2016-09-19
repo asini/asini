@@ -5,6 +5,7 @@
 <p align="center">
   <a href="https://www.npmjs.com/package/asini"><img alt="NPM Status" src="https://img.shields.io/npm/v/asini.svg?style=flat"></a>
   <a href="https://travis-ci.org/asini/asini"><img alt="Travis Status" src="https://img.shields.io/travis/asini/asini/master.svg?style=flat&label=travis"></a>
+  <a href="https://ci.appveyor.com/project/gigabo/asini"><img alt="Appveyor Status" src="https://img.shields.io/appveyor/ci/gigabo/asini.svg"></a>
 </p>
 
 ## About
