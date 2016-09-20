@@ -23,6 +23,10 @@ export default class Repository {
 
     if (FileSystemUtilities.existsSync(this.asiniJsonLocation)) {
       this.asiniJson = JSON.parse(FileSystemUtilities.readFileSync(this.asiniJsonLocation));
+    } else {
+      // No need to distinguish between missing and empty.
+      // This saves us a lot of guards.
+      this.asiniJson = {};
     }
 
     if (FileSystemUtilities.existsSync(this.packageJsonLocation)) {
@@ -31,15 +35,15 @@ export default class Repository {
   }
 
   get asiniVersion() {
-    return this.asiniJson && this.asiniJson.asini;
+    return this.asiniJson.asini;
   }
 
   get version() {
-    return this.asiniJson && this.asiniJson.version;
+    return this.asiniJson.version;
   }
 
   get packageConfigs() {
-    return (this.asiniJson || {}).packages || [{
+    return this.asiniJson.packages || [{
       glob: DEFAULT_PACKAGE_GLOB,
     }];
   }

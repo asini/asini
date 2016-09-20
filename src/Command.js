@@ -51,7 +51,7 @@ export default class Command {
       // Inherited options from `otherCommandConfigs` come before the current
       // command's configuration.
       ...[...this.otherCommandConfigs, this.name]
-        .map((name) => ((this.repository.asiniJson || {}).command || {})[name]),
+        .map((name) => (this.repository.asiniJson.command || {})[name]),
 
       // For example, the item from the `packages` array in config.
       ...objects,
@@ -210,11 +210,11 @@ export default class Command {
 
   _legacyOptions() {
     let opts = {};
-    if (this.name === "bootstrap" && (this.repository.asiniJson || {}).bootstrapConfig) {
+    if (this.name === "bootstrap" && this.repository.asiniJson.bootstrapConfig) {
       logger.warn("`bootstrapConfig.ignore` is deprecated.  Use `commands.bootstrap.ignore`.");
       opts.ignore = this.repository.asiniJson.bootstrapConfig.ignore;
     }
-    if (this.name === "publish" && (this.repository.asiniJson || {}).publishConfig) {
+    if (this.name === "publish" && this.repository.asiniJson.publishConfig) {
       logger.warn("`publishConfig.ignore` is deprecated.  Use `commands.publish.ignore`.");
       opts.ignore = this.repository.asiniJson.publishConfig.ignore;
     }
