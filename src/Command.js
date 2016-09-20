@@ -1,3 +1,4 @@
+import objectAssign from "object-assign";
 import ChildProcessUtilities from "./ChildProcessUtilities";
 import FileSystemUtilities from "./FileSystemUtilities";
 import ExitHandler from "./ExitHandler";
@@ -37,7 +38,7 @@ export default class Command {
   getOptions(...objects) {
 
     // Items lower down override items higher up.
-    return Object.assign(
+    return objectAssign(
       {},
 
       // Deprecated legacy options in `asini.json`.
