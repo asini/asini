@@ -136,7 +136,7 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.repository.buildPackageGraph(this);
+      this.repository.buildPackageGraph(this.getOptions());
       this.packages = this.repository.packages;
       this.packageGraph = this.repository.packageGraph;
       this.filteredPackages = this.repository.filteredPackages;

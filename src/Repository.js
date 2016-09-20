@@ -73,9 +73,7 @@ export default class Repository {
     return this.version === "independent";
   }
 
-  buildPackageGraph(command) {
-    let {scope, ignore} = command.getOptions();
-
+  buildPackageGraph({scope, ignore} = {}) {
     this._packages = PackageUtilities.getPackages(this);
     this._packageGraph = PackageUtilities.getPackageGraph(this._packages);
     this._filteredPackages = PackageUtilities.getFilteredPackages(this._packages, {scope, ignore});
