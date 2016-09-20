@@ -4,6 +4,7 @@ import progressBar from "../src/progressBar";
 import initFixture from "./_initFixture";
 import Command from "../src/Command";
 import logger from "../src/logger";
+import stub from "./_stub";
 
 describe("Command", () => {
   describe(".input", () => {
@@ -119,5 +120,66 @@ describe("Command", () => {
       assert.equal(new TestCCommand([], {testOption2: "f"}).getOptions({testOption2: "p"}).testOption2, "f");
     });
 
+  });
+
+  describe("legacy options", () => {
+    beforeEach((done) => {
+      initFixture("Command/legacy", done);
+    });
+
+    class TestCommand extends Command {
+    }
+
+    describe("bootstrapConfig", () => {
+      class BootstrapCommand extends Command {
+      }
+      it("should warn when used", () => {
+        let called = false;
+        stub(logger, "warn", (message) => {
+          called = true;
+          assert.equal(message, "`bootstrapConfig.ignore` is deprecated.  Use `commands.bootstrap.ignore`.");
+        });
+        new BootstrapCommand([], {}).getOptions();
+        assert.ok(called, "warning was emitted");
+      });
+      it("should provide a correct value", () => {
+        assert.equal(new BootstrapCommand([], {}).getOptions().ignore, "package-a");
+      });
+      it("should not warn with other commands", () => {
+        let called = false;
+        stub(logger, "warn", () => called = true);
+        new TestCommand([], {}).getOptions();
+        assert.ok(!called, "no warning was emitted");
+      });
+      it("should not provide a value to other commands", () => {
+        assert.equal(new TestCommand([], {}).getOptions().ignore, undefined);
+      });
+    });
+
+    describe("publishConfig", () => {
+      class PublishCommand extends Command {
+      }
+      it("should warn when used", () => {
+        let called = false;
+        stub(logger, "warn", (message) => {
+          called = true;
+          assert.equal(message, "`publishConfig.ignore` is deprecated.  Use `commands.publish.ignore`.");
+        });
+        new PublishCommand([], {}).getOptions();
+        assert.ok(called, "warning was emitted");
+      });
+      it("should provide a correct value", () => {
+        assert.equal(new PublishCommand([], {}).getOptions().ignore, "package-b");
+      });
+      it("should not warn with other commands", () => {
+        let called = false;
+        stub(logger, "warn", () => called = true);
+        new TestCommand([], {}).getOptions();
+        assert.ok(!called, "no warning was emitted");
+      });
+      it("should not provide a value to other commands", () => {
+        assert.equal(new TestCommand([], {}).getOptions().ignore, undefined);
+      });
+    });
   });
 });
