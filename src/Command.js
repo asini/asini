@@ -209,16 +209,13 @@ export default class Command {
   }
 
   _legacyOptions() {
-    let opts = {};
-    if (this.name === "bootstrap" && this.repository.asiniJson.bootstrapConfig) {
-      logger.warn("`bootstrapConfig.ignore` is deprecated.  Use `commands.bootstrap.ignore`.");
-      opts.ignore = this.repository.asiniJson.bootstrapConfig.ignore;
-    }
-    if (this.name === "publish" && this.repository.asiniJson.publishConfig) {
-      logger.warn("`publishConfig.ignore` is deprecated.  Use `commands.publish.ignore`.");
-      opts.ignore = this.repository.asiniJson.publishConfig.ignore;
-    }
-    return opts;
+    return ["bootstrap", "publish"].reduce((opts, command) => {
+      if (this.name === command && this.repository.asiniJson[`${command}Config`]) {
+        logger.warn(`\`${command}Config.ignore\` is deprecated.  Use \`commands.${command}.ignore\`.`);
+        opts.ignore = this.repository.asiniJson[`${command}Config`].ignore;
+      }
+      return opts;
+    }, {});
   }
 
   initialize() {
