@@ -7,13 +7,16 @@ import {EventEmitter} from "events";
 // Keep track of how many live children we have.
 let children = 0;
 
+// maxBuffer value for running exec
+const MAX_BUFFER = 500 * 1024;
+
 // This is used to alert listeners when all children have exited.
 const emitter = new EventEmitter;
 
 export default class ChildProcessUtilities {
   static exec(command, opts, callback) {
     const mergedOpts = objectAssign({
-      maxBuffer: 500 * 1024
+      maxBuffer: MAX_BUFFER
     }, opts);
     return ChildProcessUtilities.registerChild(
       child.exec(command, mergedOpts, (err, stdout, stderr) => {
@@ -37,7 +40,7 @@ export default class ChildProcessUtilities {
   static execSync(command, opts) {
     const mergedOpts = objectAssign({
       encoding: "utf8",
-      maxBuffer: 500 * 1024
+      maxBuffer: MAX_BUFFER
     }, opts);
     if (child.execSync) {
       return child.execSync(command, mergedOpts).trim();
