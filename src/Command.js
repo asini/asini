@@ -19,6 +19,47 @@ export default class Command {
     this.concurrency = (!flags || flags.concurrency === undefined) ? DEFAULT_CONCURRENCY : Math.max(1, +flags.concurrency || DEFAULT_CONCURRENCY);
   }
 
+  get name() {
+    // For a class named "FooCommand" this returns "foo".
+    return this.className.replace("Command", "").toLowerCase();
+  }
+
+  get className() {
+    return this.constructor.name;
+  }
+
+  // Override this to inherit config from another command.
+  // For example `updated` inherits config from `publish`.
+  get otherCommandConfigs() {
+    return [];
+  }
+
+  getOptions(...objects) {
+
+    // Items lower down override items higher up.
+    return Object.assign(
+      {},
+
+      // Deprecated legacy options in `asini.json`.
+      this._legacyOptions(),
+
+      // Global options from `asini.json`.
+      this.repository.asiniJson,
+
+      // Option overrides for commands.
+      // Inherited options from `otherCommandConfigs` come before the current
+      // command's configuration.
+      ...[...this.otherCommandConfigs, this.name]
+        .map((name) => ((this.repository.asiniJson || {}).command || {})[name]),
+
+      // For example, the item from the `packages` array in config.
+      ...objects,
+
+      // CLI flags always override everything.
+      this.flags,
+    );
+  }
+
   run() {
     this.logger.info("Asini v" + this.asiniVersion);
 
@@ -94,7 +135,7 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.repository.buildPackageGraph(this.flags);
+      this.repository.buildPackageGraph(this);
       this.packages = this.repository.packages;
       this.packageGraph = this.repository.packageGraph;
       this.filteredPackages = this.repository.filteredPackages;
@@ -164,6 +205,19 @@ export default class Command {
     } else {
       finish();
     }
+  }
+
+  _legacyOptions() {
+    let opts = {};
+    if (this.name === "bootstrap" && (this.repository.asiniJson || {}).bootstrapConfig) {
+      logger.warn("`bootstrapConfig.ignore` is deprecated.  Use `commands.bootstrap.ignore`.");
+      opts.ignore = this.repository.asiniJson.bootstrapConfig.ignore;
+    }
+    if (this.name === "publish" && (this.repository.asiniJson || {}).publishConfig) {
+      logger.warn("`publishConfig.ignore` is deprecated.  Use `commands.publish.ignore`.");
+      opts.ignore = this.repository.asiniJson.publishConfig.ignore;
+    }
+    return opts;
   }
 
   initialize() {

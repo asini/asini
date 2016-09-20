@@ -291,6 +291,10 @@ Check which `packages` have changed since the last release (the last git tag).
 
 Asini determines the last git tag created and runs `git diff --name-only v6.8.1` to get all files changed since that tag. It then returns an array of packages that have an updated file.
 
+
+**Note that configuration for the `publish` command _also_ affects the
+`updated` command.  For example `config.publish.ignore`**
+
 ### clean
 
 ```sh
@@ -394,21 +398,20 @@ Running `asini` without arguments will show all commands/options.
 {
   "asini": "x.x.x",
   "version": "1.1.3",
-  "publishConfig": {
-    "ignore": [
-      "ignored-file",
-      "*.md"
-    ]
-  },
-  "linkedFiles": {
-    "prefix": "/**\n * @flow\n */"
+  "commands": {
+    "publish": {
+      "ignore": [
+        "ignored-file",
+        "*.md"
+      ]
+    }
   }
 }
 ```
 
 - `asini`: the current version of Asini being used.
 - `version`: the current version of the repository.
-- `publishConfig.ignore`: an array of globs that won't be included in `asini updated/publish`. Use this to prevent publishing a new version unnecessarily for changes, such as fixing a `README.md` typo.
+- `commands.publish.ignore`: an array of globs that won't be included in `asini updated/publish`. Use this to prevent publishing a new version unnecessarily for changes, such as fixing a `README.md` typo.
 - `linkedFiles.prefix`: a prefix added to linked dependency files.
 
 ### Common `devDependencies`
@@ -471,9 +474,9 @@ Excludes a subset of packages when running the `bootstrap` command.
 $ asini bootstrap --ignore component-*
 ```
 
-The `ignore` flag, when used with the `bootstrap` command, can also be set in `asini.json` under the `bootstrapConfig` key. The command-line flag will take precendence over this option. This flag is supported in `bootstrap` and `exec` commands.
-
-**Note**: If both `scope` and `ignore` are provided to `exec` command, `scope` takes precedence.
+The `ignore` flag, when used with the `bootstrap` command, can also be set in
+`asini.json` at the top level or under the `commands.bootstrap` key. The
+command-line flag will take precendence over this option.
 
 **Example**
 
@@ -481,8 +484,10 @@ The `ignore` flag, when used with the `bootstrap` command, can also be set in `a
 {
   "asini": "x.x.x",
   "version": "0.0.0",
-  "bootstrapConfig": {
-    "ignore": "component-*"
+  "commands": {
+    "bootstrap": {
+      "ignore": "component-*"
+    }
   }
 }
 ```

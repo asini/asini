@@ -38,14 +38,6 @@ export default class Repository {
     return this.asiniJson && this.asiniJson.version;
   }
 
-  get publishConfig() {
-    return this.asiniJson && this.asiniJson.publishConfig || {};
-  }
-
-  get bootstrapConfig() {
-    return this.asiniJson && this.asiniJson.bootstrapConfig || {};
-  }
-
   get packageConfigs() {
     return (this.asiniJson || {}).packages || [{
       glob: DEFAULT_PACKAGE_GLOB,
@@ -77,15 +69,8 @@ export default class Repository {
     return this.version === "independent";
   }
 
-  buildPackageGraph({scope, ignore}) {
-
-    // TODO: Replace these with a nicer config sieve.
-    if (this.constructor.name === "BootstrapCommand") {
-      ignore = ignore || this.bootstrapConfig.ignore;
-    }
-    if (this.constructor.name === "PublishCommand") {
-      ignore = ignore || this.publishConfig.ignore;
-    }
+  buildPackageGraph(command) {
+    let {scope, ignore} = command.getOptions();
 
     this._packages = PackageUtilities.getPackages(this);
     this._packageGraph = PackageUtilities.getPackageGraph(this._packages);

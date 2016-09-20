@@ -1,6 +1,7 @@
 import assert from "assert";
 
 import progressBar from "../src/progressBar";
+import initFixture from "./_initFixture";
 import Command from "../src/Command";
 import logger from "../src/logger";
 
@@ -73,5 +74,50 @@ describe("Command", () => {
       const testCommand = new TestCommand([], {});
       testCommand.run();
     });
+  });
+
+  describe(".getOptions()", () => {
+    beforeEach((done) => {
+      initFixture("Command/basic", done);
+    });
+
+    class TestACommand extends Command {
+    }
+    class TestBCommand extends Command {
+    }
+    class TestCCommand extends Command {
+      get otherCommandConfigs() {
+        return ["testb"];
+      }
+    }
+
+    it("should pick up global options", () => {
+      assert.equal(new TestACommand([], {}).getOptions().testOption, "default");
+    });
+
+    it("should override global options with command-level options", () => {
+      assert.equal(new TestBCommand([], {}).getOptions().testOption, "b");
+    });
+
+    it("should override global options with inherited command-level options", () => {
+      assert.equal(new TestCCommand([], {}).getOptions().testOption, "b");
+    });
+
+    it("should override inherited command-level options with local command-level options", () => {
+      assert.equal(new TestCCommand([], {}).getOptions().testOption2, "c");
+    });
+
+    it("should override command-level options with passed-in options", () => {
+      assert.equal(new TestCCommand([], {}).getOptions({testOption2: "p"}).testOption2, "p");
+    });
+
+    it("should sieve properly within passed-in options", () => {
+      assert.equal(new TestCCommand([], {}).getOptions({testOption2: "p"}, {testOption2: "p2"}).testOption2, "p2");
+    });
+
+    it("should override everything with a CLI flag", () => {
+      assert.equal(new TestCCommand([], {testOption2: "f"}).getOptions({testOption2: "p"}).testOption2, "f");
+    });
+
   });
 });
