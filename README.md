@@ -446,6 +446,29 @@ For example the `nsp` dependency is necessary in this case for `asini run nsp`
 
 ### Flags
 
+Options to Asini can come from configuration (`asini.json`) or on the command
+line.  Additionally options in config can live at the top level or may be
+applied to specific commands.
+
+Example:
+
+```json
+{
+  "asini": "x.x.x",
+  "version": "1.2.0",
+  "exampleOption": "foo",
+  "command": {
+    "init": {
+      "exampleOption": "bar",
+    }
+  },
+}
+```
+
+In this case `exampleOption` will be "foo" for all commands except `init`,
+where it will be "bar".  In all cases it may be overridden to "baz" on the
+command-line with `--example-option=baz`.
+
 #### --concurrency
 
 How many threads to use when Asini parallelizes the tasks (defaults to `4`)
