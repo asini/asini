@@ -12,8 +12,11 @@ const emitter = new EventEmitter;
 
 export default class ChildProcessUtilities {
   static exec(command, opts, callback) {
+    const mergedOpts = objectAssign({
+      maxBuffer: 500 * 1024
+    }, opts);
     return ChildProcessUtilities.registerChild(
-      child.exec(command, opts, (err, stdout, stderr) => {
+      child.exec(command, mergedOpts, (err, stdout, stderr) => {
         if (err != null) {
 
           // If the error from `child.exec` is just that the child process
@@ -33,7 +36,8 @@ export default class ChildProcessUtilities {
 
   static execSync(command, opts) {
     const mergedOpts = objectAssign({
-      encoding: "utf8"
+      encoding: "utf8",
+      maxBuffer: 500 * 1024
     }, opts);
     if (child.execSync) {
       return child.execSync(command, mergedOpts).trim();
