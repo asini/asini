@@ -24,19 +24,19 @@ export default class InitCommand extends Command {
   ensurePackageJSON() {
     let {packageJsonLocation, packageJson} = this.repository;
 
-    if (!packageJson) packageJson = {};
+    if (!packageJson) {
+      packageJson = {};
+      this.logger.info("Creating package.json.");
+    } else {
+      this.logger.info("Updating package.json.");
+    }
+
     // if (!packageJson.private) packageJson.private = true;
     if (!packageJson.devDependencies) packageJson.devDependencies = {};
 
     objectAssignSorted(packageJson.devDependencies, {
       asini: this.asiniVersion
     });
-
-    if (!packageJson) {
-      this.logger.info("Creating package.json.");
-    } else {
-      this.logger.info("Updating package.json.");
-    }
 
     FileSystemUtilities.writeFileSync(packageJsonLocation, JSON.stringify(packageJson, null, "  "));
   }
