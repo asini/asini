@@ -3,14 +3,13 @@ import Command from "../Command";
 
 export default class UpdatedCommand extends Command {
   initialize(callback) {
-    const updatedPackagesCollector = new UpdatedPackagesCollector(
-      this.repository,
-      this.flags,
-      this.repository.publishConfig
-    );
-
+    const updatedPackagesCollector = new UpdatedPackagesCollector(this);
     this.updates = updatedPackagesCollector.getUpdates();
     callback(null, true);
+  }
+
+  get otherCommandConfigs() {
+    return ["publish"];
   }
 
   execute(callback) {

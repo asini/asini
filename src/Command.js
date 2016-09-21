@@ -1,3 +1,4 @@
+import objectAssign from "object-assign";
 import ChildProcessUtilities from "./ChildProcessUtilities";
 import FileSystemUtilities from "./FileSystemUtilities";
 import ExitHandler from "./ExitHandler";
@@ -17,6 +18,47 @@ export default class Command {
     this.repository = new Repository();
     this.progressBar = progressBar;
     this.concurrency = (!flags || flags.concurrency === undefined) ? DEFAULT_CONCURRENCY : Math.max(1, +flags.concurrency || DEFAULT_CONCURRENCY);
+  }
+
+  get name() {
+    // For a class named "FooCommand" this returns "foo".
+    return this.className.replace("Command", "").toLowerCase();
+  }
+
+  get className() {
+    return this.constructor.name;
+  }
+
+  // Override this to inherit config from another command.
+  // For example `updated` inherits config from `publish`.
+  get otherCommandConfigs() {
+    return [];
+  }
+
+  getOptions(...objects) {
+
+    // Items lower down override items higher up.
+    return objectAssign(
+      {},
+
+      // Deprecated legacy options in `asini.json`.
+      this._legacyOptions(),
+
+      // Global options from `asini.json`.
+      this.repository.asiniJson,
+
+      // Option overrides for commands.
+      // Inherited options from `otherCommandConfigs` come before the current
+      // command's configuration.
+      ...[...this.otherCommandConfigs, this.name]
+        .map((name) => (this.repository.asiniJson.command || {})[name]),
+
+      // For example, the item from the `packages` array in config.
+      ...objects,
+
+      // CLI flags always override everything.
+      this.flags,
+    );
   }
 
   run() {
@@ -94,7 +136,7 @@ export default class Command {
 
   runPreparations() {
     try {
-      this.repository.buildPackageGraph(this.flags);
+      this.repository.buildPackageGraph(this.getOptions());
       this.packages = this.repository.packages;
       this.packageGraph = this.repository.packageGraph;
       this.filteredPackages = this.repository.filteredPackages;
@@ -164,6 +206,16 @@ export default class Command {
     } else {
       finish();
     }
+  }
+
+  _legacyOptions() {
+    return ["bootstrap", "publish"].reduce((opts, command) => {
+      if (this.name === command && this.repository.asiniJson[`${command}Config`]) {
+        logger.warn(`\`${command}Config.ignore\` is deprecated.  Use \`commands.${command}.ignore\`.`);
+        opts.ignore = this.repository.asiniJson[`${command}Config`].ignore;
+      }
+      return opts;
+    }, {});
   }
 
   initialize() {
