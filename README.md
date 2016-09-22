@@ -159,7 +159,7 @@ Let's use `babel` as an example.
 ```
 
 - Asini checks if each dependency is also part of the Asini repo.
-  - In this example, `babel-generator` is a dependency, while `source-map` is not.
+  - In this example, `babel-generator` is part of the Asini repo, while `source-map` is not.
   - `source-map` is `npm install`ed like normal.
 - `packages/babel-core/node_modules/babel-generator` symlinks to `packages/babel-generator`
 - This allows nested directory imports
