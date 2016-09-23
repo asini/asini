@@ -401,4 +401,41 @@ describe("BootstrapCommand", () => {
       }));
     });
   });
+
+  describe("peer dependencies in packages in the repo", () => {
+    let testDir;
+
+    beforeEach((done) => {
+      testDir = initFixture("BootstrapCommand/peer", done);
+    });
+
+    it("should not bootstrap ignored peer dependencies", (done) => {
+      const bootstrapCommand = new BootstrapCommand([], {});
+
+      bootstrapCommand.runValidations();
+      bootstrapCommand.runPreparations();
+
+      let installed = false;
+      stub(ChildProcessUtilities, "spawn", (command, args, options, callback) => {
+        // This should never be reached
+        assert.deepEqual(args, ["install", "external@^1.0.0"]);
+        assert.deepEqual(options, { cwd: path.join(testDir, "packages/package-1"), stdio: STDIO_OPT });
+        installed = true;
+        callback();
+      });
+
+      bootstrapCommand.runCommand(exitWithCode(0, (err) => {
+        if (err) return done(err);
+
+        try {
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
+          assert.ok(!pathExists.sync(path.join(testDir, "packages/package-1/node_modules/package-2")), "The linkable peer dependency should not be installed");
+          assert.ok(!installed, "The external peer dependency should not be installed");
+          done();
+        } catch (err) {
+          done(err);
+        }
+      }));
+    });
+  });
 });
