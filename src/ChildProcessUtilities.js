@@ -3,6 +3,7 @@ import spawn from "cross-spawn";
 import objectAssign from "object-assign";
 import syncExec from "sync-exec";
 import {EventEmitter} from "events";
+import logger from "./logger";
 
 // Keep track of how many live children we have.
 let children = 0;
@@ -21,6 +22,9 @@ export default class ChildProcessUtilities {
     return ChildProcessUtilities.registerChild(
       child.exec(command, mergedOpts, (err, stdout, stderr) => {
         if (err != null) {
+
+          // output stdout on error
+          logger.info(stdout);
 
           // If the error from `child.exec` is just that the child process
           // emitted too much on stderr, then that stderr output is likely to
