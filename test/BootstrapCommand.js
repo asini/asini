@@ -410,9 +410,7 @@ describe("BootstrapCommand", () => {
     });
 
     it("should not bootstrap ignored peer dependencies", (done) => {
-      const bootstrapCommand = new BootstrapCommand([], {
-        "ignore-peer-deps": true
-      });
+      const bootstrapCommand = new BootstrapCommand([], {});
 
       bootstrapCommand.runValidations();
       bootstrapCommand.runPreparations();
