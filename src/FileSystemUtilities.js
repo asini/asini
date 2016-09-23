@@ -11,6 +11,11 @@ function ensureEndsWithNewLine(string) {
 }
 
 export default class FileSystemUtilities {
+  @logger.logifyAsync
+  static access(filePath, callback) {
+    fs.access(filePath, fs.constants.R_OK | fs.constants.W_OK, callback);
+  }
+
   @logger.logifySync
   static mkdirSync(filePath) {
     fs.mkdirSync(filePath);
@@ -19,6 +24,11 @@ export default class FileSystemUtilities {
   @logger.logifyAsync
   static mkdirp(filePath, callback) {
     mkdirp(filePath, callback);
+  }
+
+  @logger.logifyAsync
+  static readdir(dirPath, callback) {
+    fs.readdir(dirPath, callback);
   }
 
   @logger.logifySync
@@ -39,6 +49,11 @@ export default class FileSystemUtilities {
   @logger.logifySync
   static writeFileSync(filePath, fileContents) {
     fs.writeFileSync(filePath, ensureEndsWithNewLine(fileContents));
+  }
+
+  @logger.logifyAsync
+  static readFile(filePath, callback) {
+    fs.readFile(filePath, callback);
   }
 
   @logger.logifySync

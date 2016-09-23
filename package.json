@@ -28,6 +28,8 @@
     "glob": "^7.0.6",
     "inquirer": "^0.12.0",
     "lodash.find": "^4.3.0",
+    "lodash.merge": "4.6.0",
+    "lodash.template": "^4.4.0",
     "lodash.unionwith": "^4.2.0",
     "meow": "^3.7.0",
     "minimatch": "^3.0.0",

@@ -20,6 +20,7 @@ var cli = meow([
   "  run        Run npm script in each package",
   "  exec       Run a command in each package",
   "  ls         List all public packages",
+  "  template   Generates packages from templates",
   "",
   "Options:",
   "  --independent, -i    Version packages independently",

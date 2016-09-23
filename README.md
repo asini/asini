@@ -195,6 +195,30 @@ More specifically, this command will:
 
 > Asini won't publish packages which are marked as private (`"private": true` in the `package.json`).
 
+
+### template
+
+```sh
+asini template package-template my-new-package
+```
+
+Generates packages from a [lodash template](https://lodash.com/docs/4.16.1#template)
+with the following arguments:
+
+  - `packageName`: the package name supplied as the second argument
+  - `packageNames`: a list of strings that are the name of public packages in the monorepo
+  - `publicPackageNames`: a list of strings that are the name of packages in the monorepo
+
+Overwrites existing files if they are present, so make sure to commit before re-running
+to get the newest stuff.
+
+The first argument is the name of a template, a directory in the `templates` directory
+at the monorepo root (the directory with `asini.json` in it).  You can change the location
+of the templates directory by adding a key, `templates`, to `asini.json` with the
+directory that holds the templates.  The template name is the name of the subdirectory of
+templates that contains lodash templates to generate packages from.
+
+
 #### --npm-tag [tagname]
 
 ```sh
