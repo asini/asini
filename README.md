@@ -132,8 +132,7 @@ When run, this command will:
 
 1. `npm install` all external dependencies of each package.
 2. Symlink together all Asini `packages` that are dependencies of each other.
-    * This requires Administrator privileges on Windows
-2. `npm prepublish` all bootstrapped packages.
+3. `npm prepublish` all bootstrapped packages.
 
 `asini bootstrap` respects the `--ignore` flag (see below).
 
