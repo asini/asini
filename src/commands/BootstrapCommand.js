@@ -44,18 +44,6 @@ export default class BootstrapCommand extends Command {
     ], callback);
   }
 
-  /**
-   * Get packages to bootstrap
-   * @returns {Array.<Package>}
-   */
-  getPackages() {
-    const ignore = this.flags.ignore || this.repository.bootstrapConfig.ignore;
-    if (ignore) {
-      this.logger.info(`Ignoring packages that match '${ignore}'`);
-    }
-    return PackageUtilities.filterPackages(this.packages, ignore, true);
-  }
-
   runScriptInPackages(scriptName, callback) {
     const packages = this.filteredPackages.slice();
     const batches = PackageUtilities.topologicallyBatchPackages(packages, this.logger);

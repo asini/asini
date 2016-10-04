@@ -116,10 +116,12 @@ describe("PackageUtilities", () => {
   });
 
   describe(".topologicallyBatchPackages()", () => {
-    const fixture = path.join(__dirname, "fixtures/PackageUtilities/toposort/packages");
-    const packages = PackageUtilities.getPackages(fixture);
+    beforeEach((done) => {
+      initFixture("PackageUtilities/toposort", done);
+    });
 
     it("should batch roots, then internal/leaf nodes, then cycles", () => {
+      const packages = PackageUtilities.getPackages(new Repository);
       assert.deepEqual(
         PackageUtilities.topologicallyBatchPackages(packages).map((batch) => batch.map((pkg) => pkg.name)),
         [
