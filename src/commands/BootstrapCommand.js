@@ -285,7 +285,7 @@ export default class BootstrapCommand extends Command {
                 installs[pkg] = [];
               }
               installs[pkg].push(`${name}@${version}`);
-              this.logger.warning(
+              this.logger.warn(
                 `"${pkg}" package depends on ${name}@${version}, ` +
                 `which differs from the more common ${name}@${commonVersion}.`
               );
