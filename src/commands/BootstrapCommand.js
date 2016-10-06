@@ -267,8 +267,12 @@ export default class BootstrapCommand extends Command {
       // and is not already installed at root
       if (!hasPackage(name) && !this.dependencySatisfiesPackages(name, deps.map((dep) => findPackage(dep)))) {
 
-        // add the common version to root install
-        installs.__ROOT__.push(`${name}@${commonVersion}`);
+        // Only need to install if not already satisfied.
+        if (!NpmUtilities.dependencyIsSatisfied(this.repository.rootPath, name, commonVersion)) {
+
+          // add the common version to root install
+          installs.__ROOT__.push(`${name}@${commonVersion}`);
+        }
       }
 
       // add less common versions to package installs
