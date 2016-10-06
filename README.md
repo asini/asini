@@ -3,6 +3,7 @@ A tool for managing JavaScript projects with multiple packages.
 [![NPM Status][npm-status-img]][npm-url]
 [![Travis Status][travis-status-img]][travis-url]
 [![Appveyor Status][appveyor-status-img]][appveyor-url]
+[![Chat on Slack][slack-img]][slack-url]
 
 ## About
 
@@ -538,3 +539,5 @@ Any logs of a higher level than the setting are shown.  The default is "info".
 [travis-url]: https://travis-ci.org/asini/asini
 [appveyor-status-img]: https://img.shields.io/appveyor/ci/gigabo/asini.svg
 [appveyor-url]: https://ci.appveyor.com/project/gigabo/asini
+[slack-url]: https://slack.asini.io/
+[slack-img]: https://slack.asini.io/badge.svg
