@@ -247,18 +247,12 @@ export default class BootstrapCommand extends Command {
 
     // determine where each dependency will be installed
     Object.keys(depsToInstall).forEach((name) => {
-      const allVersions = Object.keys(depsToInstall[name].versions);
+      const versionCounts = depsToInstall[name].versions;
+      const allVersions = Object.keys(versionCounts);
 
-      // create an object whose keys are the number of dependents
-      // with values that are the version those dependents need
-      const reversedVersions = Object.keys(depsToInstall[name].versions).reduce((versions, version) => {
-        versions[depsToInstall[name].versions[version]] = version;
-        return versions;
-      }, {});
-
-      // get the most common version
-      const max = Math.max.apply(null, Object.keys(reversedVersions).map((v) => parseInt(v, 10)));
-      const commonVersion = reversedVersions[max.toString()];
+      // Get the most common version.
+      const commonVersion = allVersions
+        .reduce((a, b) => versionCounts[a] > versionCounts[b] ? a : b);
 
       // get an array of packages that depend on this external module
       const deps = depsToInstall[name].dependents[commonVersion];
