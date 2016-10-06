@@ -1,12 +1,9 @@
-<p align="center">
-  A tool for managing JavaScript projects with multiple packages.
-</p>
+A tool for managing JavaScript projects with multiple packages.
 
-<p align="center">
-  <a href="https://www.npmjs.com/package/asini"><img alt="NPM Status" src="https://img.shields.io/npm/v/asini.svg?style=flat"></a>
-  <a href="https://travis-ci.org/asini/asini"><img alt="Travis Status" src="https://img.shields.io/travis/asini/asini/master.svg?style=flat&label=travis"></a>
-  <a href="https://ci.appveyor.com/project/gigabo/asini"><img alt="Appveyor Status" src="https://img.shields.io/appveyor/ci/gigabo/asini.svg"></a>
-</p>
+[![NPM Status][npm-status-img]][npm-url]
+[![Travis Status][travis-status-img]][travis-url]
+[![Appveyor Status][appveyor-status-img]][appveyor-url]
+[![Chat on Slack][slack-img]][slack-url]
 
 ## About
 
@@ -535,3 +532,12 @@ Ex: in Babel, `babel-types` is depended upon by all packages in the monorepo (ov
 What level of logs to report.  On failure, all logs are written to asini-debug.log in the current working directory.
 
 Any logs of a higher level than the setting are shown.  The default is "info".
+
+[npm-status-img]: https://img.shields.io/npm/v/asini.svg?style=flat
+[npm-url]: https://www.npmjs.com/package/asini
+[travis-status-img]: https://img.shields.io/travis/asini/asini/master.svg?style=flat&label=travis
+[travis-url]: https://travis-ci.org/asini/asini
+[appveyor-status-img]: https://img.shields.io/appveyor/ci/gigabo/asini.svg
+[appveyor-url]: https://ci.appveyor.com/project/gigabo/asini
+[slack-url]: https://slack.asini.io/
+[slack-img]: https://slack.asini.io/badge.svg
