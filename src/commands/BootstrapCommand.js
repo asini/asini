@@ -219,78 +219,59 @@ export default class BootstrapCommand extends Command {
         // match external and version mismatched local packages
         .filter((dep) => !hasPackage(dep.name, dep.version) || !pkg.hasMatchingDependency(dep))
 
-        .forEach((dep) => {
-          const { name, version } = dep;
+        .forEach(({name, version}) => {
 
-          if (!depsToInstall[name]) {
-            depsToInstall[name] = {
-              versions: {},
-              dependents: {}
-            };
+          // Get the object for this package, auto-vivifying.
+          const dep = depsToInstall[name] || (depsToInstall[name] = {
+            versions   : {},
+            dependents : {}
+          });
+
+          // Add this version if it's the first time we've seen it.
+          if (!dep.versions[version]) {
+            dep.versions  [version] = 0;
+            dep.dependents[version] = [];
           }
 
-          // add dependency version
-          if (!depsToInstall[name].versions[version]) {
-            depsToInstall[name].versions[version] = 1;
-          } else {
-            depsToInstall[name].versions[version]++;
-          }
-
-          // add package with required version
-          if (!depsToInstall[name].dependents[version]) {
-            depsToInstall[name].dependents[version] = [];
-          }
-
-          depsToInstall[name].dependents[version].push(pkg.name);
+          // Record the dependency on this version.
+          dep.versions  [version]++;
+          dep.dependents[version].push(pkg.name);
         });
     });
 
     // determine where each dependency will be installed
     Object.keys(depsToInstall).forEach((name) => {
-      const versionCounts = depsToInstall[name].versions;
-      const allVersions = Object.keys(versionCounts);
+      const {versions, dependents} = depsToInstall[name];
 
       // Get the most common version.
-      const commonVersion = allVersions
-        .reduce((a, b) => versionCounts[a] > versionCounts[b] ? a : b);
+      const commonVersion = Object.keys(versions)
+        .reduce((a, b) => versions[a] > versions[b] ? a : b);
 
-      // get an array of packages that depend on this external module
-      const deps = depsToInstall[name].dependents[commonVersion];
+      // Only need to install if not already satisfied.
+      if (!NpmUtilities.dependencyIsSatisfied(this.repository.rootPath, name, commonVersion)) {
 
-      // check if the external dependency is not a package with a version mismatch,
-      // and is not already installed at root
-      if (!hasPackage(name) && !this.dependencySatisfiesPackages(name, deps.map((dep) => findPackage(dep)))) {
-
-        // Only need to install if not already satisfied.
-        if (!NpmUtilities.dependencyIsSatisfied(this.repository.rootPath, name, commonVersion)) {
-
-          // add the common version to root install
-          installs.__ROOT__.push(`${name}@${commonVersion}`);
-        }
+        // Install the most common version in the repo root.
+        installs.__ROOT__.push(`${name}@${commonVersion}`);
       }
 
-      // add less common versions to package installs
-      allVersions.forEach((version) => {
+      // Add less common versions to package installs.
+      Object.keys(versions).forEach((version) => {
 
-        // only install less common versions,
-        // unless it's a version-mismatched package
-        if (version !== commonVersion || hasPackage(name)) {
-          depsToInstall[name].dependents[version].forEach((pkg) => {
+        // Only install less common deps in the leaves.
+        if (version === commonVersion) return;
 
-            this.logger.warn(
-              `"${pkg}" package depends on ${name}@${version}, ` +
-              `which differs from the more common ${name}@${commonVersion}.`
-            );
+        dependents[version].forEach((pkg) => {
 
-            // only install dependency if it's not already installed
-            if (!findPackage(pkg).hasDependencyInstalled(name)) {
-              if (!installs[pkg]) {
-                installs[pkg] = [];
-              }
-              installs[pkg].push(`${name}@${version}`);
-            }
-          });
-        }
+          this.logger.warn(
+            `"${pkg}" package depends on ${name}@${version}, ` +
+            `which differs from the more common ${name}@${commonVersion}.`
+          );
+
+          // only install dependency if it's not already installed
+          if (!findPackage(pkg).hasDependencyInstalled(name)) {
+            (installs[pkg] || (installs[pkg] = [])).push(`${name}@${version}`);
+          }
+        });
       });
     });
     return installs;
