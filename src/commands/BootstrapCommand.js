@@ -279,16 +279,17 @@ export default class BootstrapCommand extends Command {
         if (version !== commonVersion || hasPackage(name)) {
           depsToInstall[name].dependents[version].forEach((pkg) => {
 
+            this.logger.warn(
+              `"${pkg}" package depends on ${name}@${version}, ` +
+              `which differs from the more common ${name}@${commonVersion}.`
+            );
+
             // only install dependency if it's not already installed
             if (!findPackage(pkg).hasDependencyInstalled(name)) {
               if (!installs[pkg]) {
                 installs[pkg] = [];
               }
               installs[pkg].push(`${name}@${version}`);
-              this.logger.warn(
-                `"${pkg}" package depends on ${name}@${version}, ` +
-                `which differs from the more common ${name}@${commonVersion}.`
-              );
             }
           });
         }
