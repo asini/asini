@@ -1,6 +1,6 @@
 {
   "name": "asini",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Tool for managing JavaScript projects with multiple packages",
   "main": "lib/index.js",
   "scripts": {
