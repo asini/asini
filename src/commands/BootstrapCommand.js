@@ -164,18 +164,10 @@ export default class BootstrapCommand extends Command {
 
     const hasPackage = (name, version) => Boolean(findPackage(name, version));
 
-    /**
-     * Map of dependency install locations
-     *   - keys represent a package name (i.e. "my-component")
-     *     "__ROOT__" is a special value and refers to the root folder
-     *   - values are an array of strings representing the dependency and its version to install
-     *     (i.e. ["react@15.x", "react-dom@^15.0.0", "webpack@~1.13.0"]
-     *
-     * {
-     *   <package>: [<dependency1@version>, <dependency2@version>, ...]
-     * }
-     */
+    // This will contain entries for each hoistable dependency.
     const root = [];
+
+    // This will map packages to lists of unhoistable dependencies
     const leaves = {};
 
     /**
