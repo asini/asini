@@ -227,7 +227,7 @@ export default class PublishCommand extends Command {
     this.logger.info("Changes:");
     this.logger.info(this.updates.map((update) => {
       return `- ${update.package.name}: ${update.package.version} => ${this.updatesVersions[update.package.name]}`;
-    }).join(EOL));
+    }${update.package.isPrivate() ? " (private)" : ""}).join(EOL));
     this.logger.newLine();
 
     if (!this.flags.yes) {
