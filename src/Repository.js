@@ -1,6 +1,7 @@
 import GitUtilities from "./GitUtilities";
 import FileSystemUtilities from "./FileSystemUtilities";
 import PackageUtilities from "./PackageUtilities";
+import NpmUtilities from "./NpmUtilities";
 import path from "path";
 import logger from "./logger";
 
@@ -42,6 +43,10 @@ export default class Repository {
     return this.asiniJson.version;
   }
 
+  get nodeModulesLocation() {
+    return path.join(this.rootPath, "node_modules");
+  }
+
   get packageConfigs() {
     return this.asiniJson.packages || [{
       glob: DEFAULT_PACKAGE_GLOB,
@@ -77,5 +82,11 @@ export default class Repository {
     this._packages = PackageUtilities.getPackages(this);
     this._packageGraph = PackageUtilities.getPackageGraph(this._packages);
     this._filteredPackages = PackageUtilities.getFilteredPackages(this._packages, {scope, ignore});
+  }
+
+  hasDependencyInstalled(dependency, version) {
+    return NpmUtilities.dependencyIsSatisfied(
+      this.nodeModulesLocation, dependency, version
+    );
   }
 }

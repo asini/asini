@@ -175,7 +175,8 @@ export default class BootstrapCommand extends Command {
      *   <package>: [<dependency1@version>, <dependency2@version>, ...]
      * }
      */
-    const installs = { __ROOT__: [] };
+    const root = [];
+    const leaves = {};
 
     /**
      * Map of dependencies to install
@@ -248,10 +249,10 @@ export default class BootstrapCommand extends Command {
         .reduce((a, b) => versions[a] > versions[b] ? a : b);
 
       // Only need to install if not already satisfied.
-      if (!NpmUtilities.dependencyIsSatisfied(this.repository.rootPath, name, commonVersion)) {
+      if (!this.repository.hasDependencyInstalled(name, commonVersion)) {
 
         // Install the most common version in the repo root.
-        installs.__ROOT__.push({
+        root.push({
           dependency: `${name}@${commonVersion}`,
           dependents: dependents[commonVersion],
         });
@@ -272,67 +273,48 @@ export default class BootstrapCommand extends Command {
 
           // only install dependency if it's not already installed
           if (!findPackage(pkg).hasDependencyInstalled(name)) {
-            (installs[pkg] || (installs[pkg] = [])).push({
-              dependency: `${name}@${version}`
-            });
+            (leaves[pkg] || (leaves[pkg] = [])).push(`${name}@${version}`);
           }
         });
       });
     });
-    return installs;
+    return { root, leaves };
   }
-
-  /**
-   * Install dependencies for all packages
-   * @param {Object} dependencies
-   * @param {Function} callback
-   */
-  installDependencies(dependencies, callback) {
-    const actions = [];
-    let externalDepsToInstall = 0;
-    Object.keys(dependencies).forEach((dest) => {
-      const destLocation = dest === "__ROOT__"
-        ? this.repository.rootPath
-        : path.join(this.repository.packagesLocation, dest);
-      if (dependencies[dest].length) {
-        externalDepsToInstall += dependencies[dest].length;
-        actions.push((cb) => NpmUtilities.installInDir(destLocation, dependencies[dest], cb));
-      }
-    });
-    if (externalDepsToInstall > 0) {
-      this.logger.info(`Installing ${externalDepsToInstall} external dependencies`);
-    }
-    async.parallelLimit(actions, this.concurrency, callback);
-  }
-
-
 
   /**
    * Install external dependencies for all packages
    * @param {Function} callback
    */
   installExternalDependencies(callback) {
-    this.logger.info("Installing external dependencies");
-    this.progressBar.init(this.filteredPackages.length);
-    const actions = [];
-    this.filteredPackages.forEach((pkg) => {
-      const allDependencies = pkg.allDependencies;
-      const externalPackages = Object.keys(allDependencies)
-        .filter((dependency) => {
-          const match = find(this.packages, (pkg) => {
-            return pkg.name === dependency;
-          });
-          return !(match && pkg.hasMatchingDependency(match));
-        })
-        .filter((dependency) => !pkg.hasDependencyInstalled(dependency))
-        .map((dependency) => dependency + "@" + allDependencies[dependency]);
-      if (externalPackages.length) {
-        actions.push((cb) => NpmUtilities.installInDir(pkg.location, externalPackages, (err) => {
-          this.progressBar.tick(pkg.name);
+    const {leaves, root} = this.getDependenciesToInstall(this.filteredPackages);
+
+    const actions = Object.keys(leaves)
+      .map((pkgName) => ({pkg: this.packageGraph.get(pkgName).package, deps: leaves[pkgName]}))
+      .map(({pkg, deps}) => (cb) => NpmUtilities.installInDir(pkg.location, deps, (err) => {
+        this.progressBar.tick(pkg.name);
+        cb(err);
+      }));
+
+    if (Object.keys(root).length) {
+      actions.push((cb) => NpmUtilities.installInDir(
+        this.repository.rootPath,
+        root.map(({dependency}) => dependency),
+        (err) => {
+          // TODO: Link binaries.
+          this.progressBar.tick("Hoisted");
           cb(err);
-        }));
-      }
-    });
+        }
+      ));
+    }
+
+    if (actions.length) {
+
+      this.logger.info("Installing external dependencies");
+
+      // One extra for the root.
+      this.progressBar.init(actions.length);
+    }
+
     async.parallelLimit(actions, this.concurrency, (err) => {
       this.progressBar.terminate();
       callback(err);
