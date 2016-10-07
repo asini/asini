@@ -251,7 +251,10 @@ export default class BootstrapCommand extends Command {
       if (!NpmUtilities.dependencyIsSatisfied(this.repository.rootPath, name, commonVersion)) {
 
         // Install the most common version in the repo root.
-        installs.__ROOT__.push(`${name}@${commonVersion}`);
+        installs.__ROOT__.push({
+          dependency: `${name}@${commonVersion}`,
+          dependents: dependents[commonVersion],
+        });
       }
 
       // Add less common versions to package installs.
@@ -269,7 +272,9 @@ export default class BootstrapCommand extends Command {
 
           // only install dependency if it's not already installed
           if (!findPackage(pkg).hasDependencyInstalled(name)) {
-            (installs[pkg] || (installs[pkg] = [])).push(`${name}@${version}`);
+            (installs[pkg] || (installs[pkg] = [])).push({
+              dependency: `${name}@${version}`
+            });
           }
         });
       });
