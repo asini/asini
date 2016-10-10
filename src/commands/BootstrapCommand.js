@@ -248,28 +248,40 @@ export default class BootstrapCommand extends Command {
       const commonVersion = Object.keys(versions)
         .reduce((a, b) => versions[a] > versions[b] ? a : b);
 
-      // Install the most common version in the repo root.
+      // Get the version required by the repo root (if any).
+      // If the root doesn't have a dependency on this package then we'll
+      // install the most common dependency there.
+      const rootVersion = this.repository.package.allDependencies[name] || commonVersion;
+
+      if (rootVersion !== commonVersion) {
+        this.logger.warn(
+          `The repository root depends on ${name}@${rootVersion}, ` +
+          `which differs from the more common ${name}@${commonVersion}.`
+        );
+      }
+
+      // Install the best version we can in the repo root.
       // Even if it's already installed there we still need to make sure any
       // binaries are linked to the packages that depend on them.
       root.push({
         name,
-        dependents: dependents[commonVersion],
-        dependency: this.repository.hasDependencyInstalled(name, commonVersion)
+        dependents: dependents[rootVersion],
+        dependency: this.repository.hasDependencyInstalled(name, rootVersion)
           ? null // Don't re-install if it's already there.
-          : `${name}@${commonVersion}`,
+          : `${name}@${rootVersion}`,
       });
 
       // Add less common versions to package installs.
       Object.keys(versions).forEach((version) => {
 
-        // Only install less common deps in the leaves.
-        if (version === commonVersion) return;
+        // Only install deps that can't be hoisted in the leaves.
+        if (version === rootVersion) return;
 
         dependents[version].forEach((pkg) => {
 
           this.logger.warn(
             `"${pkg}" package depends on ${name}@${version}, ` +
-            `which differs from the more common ${name}@${commonVersion}.`
+            `which differs from the hoisted ${name}@${rootVersion}.`
           );
 
           // only install dependency if it's not already installed

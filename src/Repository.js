@@ -1,6 +1,7 @@
 import GitUtilities from "./GitUtilities";
 import FileSystemUtilities from "./FileSystemUtilities";
 import PackageUtilities from "./PackageUtilities";
+import Package from "./Package";
 import NpmUtilities from "./NpmUtilities";
 import path from "path";
 import logger from "./logger";
@@ -33,6 +34,8 @@ export default class Repository {
     if (FileSystemUtilities.existsSync(this.packageJsonLocation)) {
       this.packageJson = JSON.parse(FileSystemUtilities.readFileSync(this.packageJsonLocation));
     }
+
+    this.package = new Package(this.packageJson, this.rootPath);
   }
 
   get asiniVersion() {
