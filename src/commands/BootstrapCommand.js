@@ -130,6 +130,18 @@ export default class BootstrapCommand extends Command {
     async.series(actions, callback);
   }
 
+  hoistedDirectory(dependency) {
+    return path.join(this.repository.rootPath, "node_modules", dependency);
+  }
+
+  hoistedPackageJson(dependency) {
+    try {
+      return require(path.join(this.hoistedDirectory(dependency), "package.json"));
+    } catch (e) {
+      // Pass.
+    }
+  }
+
   /**
    * Determine if a dependency installed at the root satifies the requirements of the passed packages
    * This helps to optimize the bootstrap process and skip dependencies that are already installed
@@ -137,17 +149,13 @@ export default class BootstrapCommand extends Command {
    * @param {Array.<String>} packages
    */
   dependencySatisfiesPackages(dependency, packages) {
-    const packageJson = path.join(this.repository.rootPath, "node_modules", dependency, "package.json");
-    try {
-      return packages.every((pkg) => {
-        return semver.satisfies(
-          require(packageJson).version,
-          pkg.allDependencies[dependency]
-        );
-      });
-    } catch (e) {
-      return false;
-    }
+    const {version} = (this.hoistedPackageJson(dependency) || {});
+    return packages.every((pkg) => {
+      return semver.satisfies(
+        version,
+        pkg.allDependencies[dependency]
+      );
+    });
   }
 
   /**
@@ -240,15 +248,16 @@ export default class BootstrapCommand extends Command {
       const commonVersion = Object.keys(versions)
         .reduce((a, b) => versions[a] > versions[b] ? a : b);
 
-      // Only need to install if not already satisfied.
-      if (!this.repository.hasDependencyInstalled(name, commonVersion)) {
-
-        // Install the most common version in the repo root.
-        root.push({
-          dependency: `${name}@${commonVersion}`,
-          dependents: dependents[commonVersion],
-        });
-      }
+      // Install the most common version in the repo root.
+      // Even if it's already installed there we still need to make sure any
+      // binaries are linked to the packages that depend on them.
+      root.push({
+        name,
+        dependents: dependents[commonVersion],
+        dependency: this.repository.hasDependencyInstalled(name, commonVersion)
+          ? null // Don't re-install if it's already there.
+          : `${name}@${commonVersion}`,
+      });
 
       // Add less common versions to package installs.
       Object.keys(versions).forEach((version) => {
@@ -292,9 +301,26 @@ export default class BootstrapCommand extends Command {
         this.repository.rootPath,
         root.map(({dependency}) => dependency),
         (err) => {
-          // TODO: Link binaries.
-          this.progressBar.tick("Hoisted");
-          cb(err);
+          if (err) return cb(err);
+
+          // Link binaries into dependent packages so npm scripts will have
+          // access to them.
+          async.series(root.map(({name, dependents}) => (cb) => {
+            const {bin} = (this.hoistedPackageJson(name) || {});
+            if (bin) {
+              async.series(dependents.map((dep) => (cb) => {
+                const pkg  = this.packageGraph.get(dep).package;
+                const src  = this.hoistedDirectory(name);
+                const dest = pkg.nodeModulesLocation;
+                this.createBinaryLink(src, dest, name, bin, cb);
+              }), cb);
+            } else {
+              cb();
+            }
+          }), (err) => {
+            this.progressBar.tick("Hoisted");
+            cb(err);
+          });
         }
       ));
     }
