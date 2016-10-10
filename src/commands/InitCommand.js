@@ -31,6 +31,20 @@ export default class InitCommand extends Command {
       this.logger.info("Updating package.json.");
     }
 
+    let targetDependencies;
+    if (packageJson.dependencies && packageJson.dependencies.lerna) {
+      // lerna is a dependency in the current project
+      targetDependencies = packageJson.dependencies;
+    } else {
+      // lerna is a devDependency or no dependency, yet
+      if (!packageJson.devDependencies) packageJson.devDependencies = {};
+      targetDependencies = packageJson.devDependencies;
+    }
+
+    objectAssignSorted(targetDependencies, {
+      lerna: this.lernaVersion
+    });
+
     // if (!packageJson.private) packageJson.private = true;
     if (!packageJson.devDependencies) packageJson.devDependencies = {};
 
