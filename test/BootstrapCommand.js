@@ -251,10 +251,10 @@ describe("BootstrapCommand", () => {
           { args: ["npm", ["install", "foo@^1.0.0"], { cwd: path.join(testDir, "packages", "package-2"), stdio: STDIO_OPT }] }
         ]],
         [ChildProcessUtilities, "spawn", { nodeCallback: true }, [
-          { args: ["npm", ["install", "@test/package-1@^0.0.0"], { cwd: path.join(testDir, "packages", "package-4"), stdio: STDIO_OPT }] }
+          { args: ["npm", ["install", "foo@0.1.12"], { cwd: path.join(testDir, "package-3"), stdio: STDIO_OPT }] }
         ]],
         [ChildProcessUtilities, "spawn", { nodeCallback: true }, [
-          { args: ["npm", ["install", "foo@0.1.12"], { cwd: path.join(testDir, "package-3"), stdio: STDIO_OPT }] }
+          { args: ["npm", ["install", "@test/package-1@^0.0.0"], { cwd: path.join(testDir, "packages", "package-4"), stdio: STDIO_OPT }] }
         ]],
       ]);
 
