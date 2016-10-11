@@ -273,7 +273,7 @@ export default class BootstrapCommand extends Command {
         // binaries are linked to the packages that depend on them.
         root.push({
           name,
-          dependents: dependents[rootVersion],
+          dependents: dependents[rootVersion].map((dep) => this.packageGraph.get(dep).package),
           dependency: this.repository.hasDependencyInstalled(name, rootVersion)
             ? null // Don't re-install if it's already there.
             : `${name}@${rootVersion}`,
@@ -329,8 +329,7 @@ export default class BootstrapCommand extends Command {
           async.series(root.map(({name, dependents}) => (cb) => {
             const {bin} = (this.hoistedPackageJson(name) || {});
             if (bin) {
-              async.series(dependents.map((dep) => (cb) => {
-                const pkg  = this.packageGraph.get(dep).package;
+              async.series(dependents.map((pkg) => (cb) => {
                 const src  = this.hoistedDirectory(name);
                 const dest = pkg.nodeModulesLocation;
                 this.createBinaryLink(src, dest, name, bin, cb);
@@ -349,10 +348,8 @@ export default class BootstrapCommand extends Command {
       // installed in package directories.
       actions.push((cb) => {
         async.series(root.map(({name, dependents}) => (cb) => {
-          async.series(dependents.map((dep) => (cb) => {
-            FileSystemUtilities.rimraf(
-              path.join(this.packageGraph.get(dep).package.nodeModulesLocation, name), cb
-            );
+          async.series(dependents.map(({nodeModulesLocation: dir}) => (cb) => {
+            FileSystemUtilities.rimraf(path.join(dir, name), cb);
           }), cb);
         }), (err) => {
           this.progressBar.tick("Prune hoisted");
