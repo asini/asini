@@ -172,6 +172,10 @@ export default class BootstrapCommand extends Command {
 
     const hasPackage = (name, version) => Boolean(findPackage(name, version));
 
+    // Configuration for what packages to hoist may be in asini.json or it may
+    // come in as command line options.
+    const {hoist: scope, nohoist: ignore} = this.getOptions();
+
     // This will contain entries for each hoistable dependency.
     const root = [];
 
@@ -244,32 +248,37 @@ export default class BootstrapCommand extends Command {
     Object.keys(depsToInstall).forEach((name) => {
       const {versions, dependents} = depsToInstall[name];
 
-      // Get the most common version.
-      const commonVersion = Object.keys(versions)
-        .reduce((a, b) => versions[a] > versions[b] ? a : b);
+      let rootVersion;
 
-      // Get the version required by the repo root (if any).
-      // If the root doesn't have a dependency on this package then we'll
-      // install the most common dependency there.
-      const rootVersion = this.repository.package.allDependencies[name] || commonVersion;
+      if (scope && PackageUtilities.getFilteredPackage({name}, {scope, ignore})) {
 
-      if (rootVersion !== commonVersion) {
-        this.logger.warn(
-          `The repository root depends on ${name}@${rootVersion}, ` +
-          `which differs from the more common ${name}@${commonVersion}.`
-        );
+        // Get the most common version.
+        const commonVersion = Object.keys(versions)
+          .reduce((a, b) => versions[a] > versions[b] ? a : b);
+
+        // Get the version required by the repo root (if any).
+        // If the root doesn't have a dependency on this package then we'll
+        // install the most common dependency there.
+        rootVersion = this.repository.package.allDependencies[name] || commonVersion;
+
+        if (rootVersion !== commonVersion) {
+          this.logger.warn(
+            `The repository root depends on ${name}@${rootVersion}, ` +
+            `which differs from the more common ${name}@${commonVersion}.`
+          );
+        }
+
+        // Install the best version we can in the repo root.
+        // Even if it's already installed there we still need to make sure any
+        // binaries are linked to the packages that depend on them.
+        root.push({
+          name,
+          dependents: dependents[rootVersion],
+          dependency: this.repository.hasDependencyInstalled(name, rootVersion)
+            ? null // Don't re-install if it's already there.
+            : `${name}@${rootVersion}`,
+        });
       }
-
-      // Install the best version we can in the repo root.
-      // Even if it's already installed there we still need to make sure any
-      // binaries are linked to the packages that depend on them.
-      root.push({
-        name,
-        dependents: dependents[rootVersion],
-        dependency: this.repository.hasDependencyInstalled(name, rootVersion)
-          ? null // Don't re-install if it's already there.
-          : `${name}@${rootVersion}`,
-      });
 
       // Add less common versions to package installs.
       Object.keys(versions).forEach((version) => {
