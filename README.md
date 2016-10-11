@@ -533,6 +533,30 @@ What level of logs to report.  On failure, all logs are written to asini-debug.l
 
 Any logs of a higher level than the setting are shown.  The default is "info".
 
+#### --hoist [glob]
+
+Install external dependencies matching `glob` at the repo root so they're
+available to all packages.  Any binaries from these dependencies will be
+linked into dependent package `node_modules/.bin/` directories so they're
+available for npm scripts.  If no `glob` is given the default is `**` (hoist
+everything).  This option only affects the `bootstrap` command.
+
+```sh
+$ asini bootstrap --hoist
+```
+
+Note: If packages depend on different _versions_ of an external dependency,
+the most commonly used version will be hoisted, and a warning will be emitted.
+
+#### --nohoist [glob]
+
+Do _not_ install external dependencies matching `glob` at the repo root.  This
+can be used to opt out of hoisting for certain dependencies.
+
+```sh
+$ asini bootstrap --hoist --nohoist=babel-*
+```
+
 [npm-status-img]: https://img.shields.io/npm/v/asini.svg?style=flat
 [npm-url]: https://www.npmjs.com/package/asini
 [travis-status-img]: https://img.shields.io/travis/asini/asini/master.svg?style=flat&label=travis
