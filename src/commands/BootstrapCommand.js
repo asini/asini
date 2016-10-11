@@ -339,11 +339,26 @@ export default class BootstrapCommand extends Command {
               cb();
             }
           }), (err) => {
-            this.progressBar.tick("Hoisted");
+            this.progressBar.tick("Install hoisted");
             cb(err);
           });
         }
       ));
+
+      // Remove any hoisted dependencies that may have previously been
+      // installed in package directories.
+      actions.push((cb) => {
+        async.series(root.map(({name, dependents}) => (cb) => {
+          async.series(dependents.map((dep) => (cb) => {
+            FileSystemUtilities.rimraf(
+              path.join(this.packageGraph.get(dep).package.nodeModulesLocation, name), cb
+            );
+          }), cb);
+        }), (err) => {
+          this.progressBar.tick("Prune hoisted");
+          cb(err);
+        });
+      });
     }
 
     if (actions.length) {
