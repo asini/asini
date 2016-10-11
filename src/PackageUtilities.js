@@ -93,8 +93,9 @@ export default class PackageUtilities {
     if (!glob) return true;
 
     // Include/exlude with no arguments implies splat.
-    // For example: `--hoist` is equivalent to `--hoist=*`.
-    if (glob === true) glob = "*";
+    // For example: `--hoist` is equivalent to `--hoist=**`.
+    // The double star here is to account for scoped packages.
+    if (glob === true) glob = "**";
 
     if (!isArray(glob)) glob = [glob];
 

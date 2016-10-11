@@ -46,6 +46,33 @@ describe("BootstrapCommand", () => {
     });
   });
 
+  describe("with hoisting", () => {
+    let testDir;
+
+    beforeEach((done) => {
+      testDir = initFixture("BootstrapCommand/basic", done);
+    });
+
+    it("should hoist", (done) => {
+      const bootstrapCommand = new BootstrapCommand([], {hoist: true});
+
+      bootstrapCommand.runValidations();
+      bootstrapCommand.runPreparations();
+
+      assertStubbedCalls([
+        [ChildProcessUtilities, "spawn", { nodeCallback: true }, [
+          { args: ["npm", ["install", "foo@0.1.12"], { cwd: path.join(testDir, "packages" ,"package-3"), stdio: STDIO_OPT }] }
+        ]],
+        [ChildProcessUtilities, "spawn", { nodeCallback: true }, [
+          { args: ["npm", ["install", "foo@^1.0.0", "@test/package-1@^0.0.0"], { cwd: testDir, stdio: STDIO_OPT }] }
+        ]],
+      ]);
+
+      bootstrapCommand.runCommand(exitWithCode(0, done));
+    });
+  });
+
+
   describe("dependencies between packages in the repo", () => {
     let testDir;
 
