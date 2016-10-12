@@ -1,0 +1,17 @@
+{
+  "asini": "1.0.0",
+  "packages": [
+    {
+      "glob": "package.json"
+    }
+  ],
+  "changelog": {
+    "repo": "asini/asini",
+    "labels": {
+      "enhancement": "Enhancement",
+      "bug": "Bug fix"
+    },
+    "cacheDir": ".changelog"
+  },
+  "version": "1.0.0"
+}
