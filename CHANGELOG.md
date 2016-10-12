@@ -1,3 +1,19 @@
+## v1.0.1 (2016-10-12)
+
+#### Enhancement
+  * [#38](https://github.com/asini/asini/pull/38) Make asini an asini repo. ([@gigabo](https://github.com/gigabo))
+
+#### Bug fix
+  * [#34](https://github.com/asini/asini/pull/34) Resolve symlink path on windows to add trailing slash.. ([@garyjN7](https://github.com/garyjN7))
+  * [#35](https://github.com/asini/asini/pull/35) fix: lerna init assumes lerna in devDependencies. ([@joscha](https://github.com/joscha))
+  * [#33](https://github.com/asini/asini/pull/33) Use default text color for `logger.info` output. ([@gigabo](https://github.com/gigabo))
+
+#### Commiters: 3
+- Bo Borgerson ([gigabo](https://github.com/gigabo))
+- Gary Johnson ([garyjN7](https://github.com/garyjN7))
+- Joscha Feth ([joscha](https://github.com/joscha))
+
+
 ## v1.0.0 (2016-10-07)
 
 #### Enhancement
