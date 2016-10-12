@@ -10,6 +10,7 @@
     "fix": "eslint src test --fix",
     "test": "mocha -t 5000",
     "ci": "npm run lint && cross-env DEBUG_CALLS=true npm run test",
+    "changelog": "asini-changelog",
     "prepublish": "npm run build"
   },
   "repository": {
@@ -50,6 +51,7 @@
     "asini": "./bin/asini.js"
   },
   "devDependencies": {
+    "asini-changelog": "^1.0.0",
     "babel-cli": "^6.7.5",
     "babel-eslint": "^6.0.2",
     "babel-plugin-add-module-exports": "^0.2.1",

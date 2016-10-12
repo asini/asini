@@ -3,6 +3,9 @@
   "packages": [
     {
       "glob": "package.json"
+    },
+    {
+      "glob": "packages/*/package.json"
     }
   ],
   "changelog": {
