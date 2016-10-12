@@ -32,10 +32,8 @@
     "eslint": "^2.10.2",
     "rimraf": "^2.5.2"
   },
-  "peerDependencies": {
-    "asini": "^1.0.0"
-  },
   "dependencies": {
+    "asini": "^1.0.0",
     "chalk": "^1.1.3",
     "mkdirp": "^0.5.1"
   }
