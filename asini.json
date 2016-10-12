@@ -1,5 +1,5 @@
 {
-  "asini": "1.0.0",
+  "asini": "1.0.1",
   "packages": [
     {
       "glob": "package.json"
