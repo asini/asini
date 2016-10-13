@@ -289,10 +289,12 @@ export default class BootstrapCommand extends Command {
 
         dependents[version].forEach((pkg) => {
 
-          this.logger.warn(
-            `"${pkg}" package depends on ${name}@${version}, ` +
-            `which differs from the hoisted ${name}@${rootVersion}.`
-          );
+          if (rootVersion) {
+            this.logger.warn(
+              `"${pkg}" package depends on ${name}@${version}, ` +
+              `which differs from the hoisted ${name}@${rootVersion}.`
+            );
+          }
 
           // only install dependency if it's not already installed
           if (!findPackage(pkg).hasDependencyInstalled(name)) {
