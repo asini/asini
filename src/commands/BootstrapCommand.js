@@ -273,7 +273,8 @@ export default class BootstrapCommand extends Command {
         // binaries are linked to the packages that depend on them.
         root.push({
           name,
-          dependents: dependents[rootVersion].map((dep) => this.packageGraph.get(dep).package),
+          dependents: (dependents[rootVersion] || [])
+            .map((dep) => this.packageGraph.get(dep).package),
           dependency: this.repository.hasDependencyInstalled(name, rootVersion)
             ? null // Don't re-install if it's already there.
             : `${name}@${rootVersion}`,
