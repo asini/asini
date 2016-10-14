@@ -319,7 +319,7 @@ export default class BootstrapCommand extends Command {
     if (Object.keys(root).length) {
       actions.push((cb) => NpmUtilities.installInDir(
         this.repository.rootPath,
-        root.map(({dependency}) => dependency),
+        root.map(({dependency}) => dependency).filter((dep) => dep),
         (err) => {
           if (err) return cb(err);
 
