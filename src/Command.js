@@ -62,10 +62,10 @@ export default class Command {
   }
 
   run() {
-    this.logger.info("Asini v" + this.asiniVersion);
+    this.logger.verbose("Asini v" + this.asiniVersion);
 
     if (this.repository.isIndependent()) {
-      this.logger.info("Independent Versioning Mode");
+      this.logger.verbose("Independent Versioning Mode");
     }
 
     this.runValidations();
