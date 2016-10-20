@@ -325,6 +325,16 @@ $ asini ls
 
 List all of the public packages in the current Asini repo.
 
+## add
+
+```sh
+$ asini add lodash@4.16.4 --scope some-package --scope another-package
+```
+
+Add and install a dependency in packages.  Adds to _all_ packages by default.
+Limit to specific packages with `--scope`.  If no version is supplied the
+latest version will be used with a caret range.
+
 ### run
 
 ```sh
