@@ -34,7 +34,7 @@ export default class NpmUtilities {
     return ChildProcessUtilities.execSync(`npm dist-tag ls ${packageName}`).indexOf(tag) >= 0;
   }
 
-  @logger.logifySync
+  @logger.logifyAsync
   static execInDir(command, args, directory, callback) {
     ChildProcessUtilities.exec(`npm ${command} ${escapeArgs(args)}`, { cwd: directory, env: process.env }, callback);
   }
