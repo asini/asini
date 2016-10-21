@@ -80,6 +80,8 @@ describe("RunCommand", () => {
 
     assert.equal(haveExited, false);
 
-    children.forEach((child) => child.emit("exit"));
+    setTimeout(() => {
+      children.forEach((child) => child.emit("exit"));
+    }, 100);
   });
 });
