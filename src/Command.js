@@ -197,11 +197,11 @@ export default class Command {
 
     const childProcessCount = ChildProcessUtilities.getChildProcessCount();
     if (childProcessCount > 0) {
-      logger.info(
+      setTimeout(() => logger.info(
         `Waiting for ${childProcessCount} child ` +
         `process${childProcessCount === 1 ? "" : "es"} to exit. ` +
         "CTRL-C to exit immediately."
-      );
+      ), process.env.NODE_ENV === "test" ? 100 : 1000).unref();
       ChildProcessUtilities.onAllExited(finish);
     } else {
       finish();
