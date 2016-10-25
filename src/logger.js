@@ -80,6 +80,9 @@ class Logger {
       args.push((error, value) => {
         if (error) {
           logger.error(msg);
+          if (value) {
+            logger.error(value);
+          }
         } else {
           logger.silly(msg + " => " + logger._formatValue(value));
         }
