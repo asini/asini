@@ -371,7 +371,6 @@ export default class BootstrapCommand extends Command {
 
       this.logger.info("Installing external dependencies");
 
-      // One extra for the root.
       this.progressBar.init(actions.length);
     }
 
