@@ -23,13 +23,16 @@ describe("AddCommand", () => {
     addCommand.runValidations();
     addCommand.runPreparations();
 
-    let pkg = 1;
+    const want = [1,2,3,4].reduce((m, v) => {
+      m[path.join(testDir, `packages/package-${v}/package.json`)] = true;
+      return m;
+    }, {});
+    const got = {};
     stub(FileSystemUtilities, "writeFile", (fn, value, callback) => {
 
-      assert.equal(fn, path.join(testDir, `packages/package-${pkg}/package.json`));
+      got[fn] = true;
       assert.equal(JSON.parse(value).dependencies["an-external-dep"], "1.0.0");
 
-      pkg++;
       callback();
     });
 
@@ -39,6 +42,7 @@ describe("AddCommand", () => {
 
     addCommand.runCommand(exitWithCode(0, (err) => {
       assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")), "asini-debug.log should not exist");
+      assert.deepEqual(want, got, "Wrote our package.jsons");
       done(err);
     }));
 
@@ -51,10 +55,10 @@ describe("AddCommand", () => {
     addCommand.runPreparations();
 
     let pkg = 1;
-    stub(ChildProcessUtilities, "spawn", (command, args, options, callback) => {
+    stub(NpmUtilities, "installInDir", (dir, deps, callback) => {
 
-      assert.deepEqual(args, ["install", "an-external-dep@1.0.0"]);
-      assert.equal(options.cwd, path.join(testDir, "packages/package-" + pkg));
+      assert.deepEqual(deps, ["an-external-dep@1.0.0"]);
+      assert.equal(dir, path.join(testDir, "packages/package-" + pkg));
 
       pkg++;
       callback();
@@ -77,9 +81,9 @@ describe("AddCommand", () => {
       callback(null, "1.0.1");
     });
 
-    stub(ChildProcessUtilities, "spawn", (command, args, options, callback) => {
+    stub(NpmUtilities, "installInDir", (dir, deps, callback) => {
 
-      assert.equal(args[1], "an-external-dep@^1.0.1");
+      assert.deepEqual(deps, ["an-external-dep@^1.0.1"]);
 
       callback();
     });
@@ -95,10 +99,10 @@ describe("AddCommand", () => {
     addCommand.runPreparations();
 
     let calls = 0;
-    stub(ChildProcessUtilities, "spawn", (command, args, options, callback) => {
+    stub(NpmUtilities, "installInDir", (dir, deps, callback) => {
 
-      assert.equal(args[1], "an-external-dep@1.0.0");
-      assert.equal(options.cwd, testDir);
+      assert.deepEqual(deps, ["an-external-dep@1.0.0"]);
+      assert.equal(dir, testDir);
 
       assert.ok(!calls++, "Only called once");
 
@@ -138,16 +142,20 @@ describe("AddCommand", () => {
     addCommand.runValidations();
     addCommand.runPreparations();
 
-    let pkg = 0;
+    const want = {
+      [path.join(testDir, "packages/package-1")]: true,
+      [path.join(testDir, "packages/package-2")]: true,
+    };
+    const got = {};
     stub(ChildProcessUtilities, "spawn", (command, args, options, callback) => {
 
-      assert.equal(options.cwd, path.join(testDir, "packages/package-" + ++pkg));
+      got[options.cwd] = true;
 
       callback();
     });
 
     addCommand.runCommand(exitWithCode(0, (err) => {
-      assert.equal(pkg, 2, "Saw both packages");
+      assert.deepEqual(got, want, "Saw both packages");
       done(err);
     }));
 
