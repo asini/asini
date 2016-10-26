@@ -31,7 +31,7 @@ export default class AddCommand extends BootstrapMixin(Command) {
   execute(callback) {
     this.progressBar.init(this.input.length);
     async.parallelLimit(this.input.map((dep) => (cb) => {
-      const [pkg, version] = dep.split("@");
+      const [pkg, version] = NpmUtilities.splitVersion(dep);
       if (version) {
         this.add(pkg, version, cb);
       } else {
