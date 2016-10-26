@@ -325,7 +325,7 @@ $ asini ls
 
 List all of the public packages in the current Asini repo.
 
-## add
+### add
 
 ```sh
 $ asini add lodash@4.16.4 --scope some-package --scope another-package
