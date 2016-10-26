@@ -1,3 +1,21 @@
+## v1.1.0 (2016-10-26)
+
+#### Enhancement
+  * [#45](https://github.com/asini/asini/pull/45) Install with no arguments. ([@gigabo](https://github.com/gigabo))
+  * [#41](https://github.com/asini/asini/pull/41) Reduce the log level of some command output. ([@gigabo](https://github.com/gigabo))
+  * [#44](https://github.com/asini/asini/pull/44) Wait a second before complaining about orphans. ([@gigabo](https://github.com/gigabo))
+  * [#43](https://github.com/asini/asini/pull/43) Log stdout when commands fail. ([@seansfkelley](https://github.com/seansfkelley))
+  * [#36](https://github.com/asini/asini/pull/36) Automatic hoisting of common dependencies to repo root. ([@gigabo](https://github.com/gigabo))
+
+#### Bug fix
+  * [#42](https://github.com/asini/asini/pull/42) Fix a sync/async decorator typo. ([@gigabo](https://github.com/gigabo))
+
+#### Commiters: 4
+- Bo Borgerson ([gigabo](https://github.com/gigabo))
+- Ry Racherbaumer ([rygine](https://github.com/rygine))
+- Sean Kelley ([seansfkelley](https://github.com/seansfkelley))
+- Sresan Thevarajah ([sresant](https://github.com/sresant))
+
 ## v1.0.1 (2016-10-12)
 
 #### Enhancement
