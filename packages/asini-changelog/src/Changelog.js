@@ -18,7 +18,7 @@ export default class Changelog {
     if (!config) {
       throw new ConfigurationError(
         "Missing changelog config in `asini.json`.\n"+
-        "See docs for setup: https://github.com/asini/asini/tree/master/packages/lerna-changelog#asini-changelog"
+        "See docs for setup: https://github.com/asini/asini/tree/master/packages/asini-changelog#asini-changelog"
       );
     }
 
