@@ -1,0 +1,11 @@
+{
+  "asini": "__TEST_VERSION__",
+  "version": "1.0.0",
+  "command": {
+    "publish": {
+      "//": "These options may appear at the top-level or within publish.  Testing both.",
+      "skipNpm": true
+    }
+  },
+  "skipGit": true
+}
