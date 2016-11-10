@@ -583,6 +583,61 @@ describe("PublishCommand", () => {
   });
 
   /** =========================================================================
+   * NORMAL - SKIP GIT AND SKIP NPM via asini.json
+   * ======================================================================= */
+
+  describe("normal mode with skipGit and skipNpm via asini.json", () => {
+    let testDir;
+
+    beforeEach((done) => {
+      testDir = initFixture("PublishCommand/skip", done);
+    });
+
+    it("should update versions but not push changes or publish", (done) => {
+      const publishCommand = new PublishCommand([], {});
+
+      publishCommand.runValidations();
+      publishCommand.runPreparations();
+
+      assertStubbedCalls([
+        [ChildProcessUtilities, "execSync", {}, [
+          { args: ["git tag"] }
+        ]],
+        [PromptUtilities, "select", { valueCallback: true }, [
+          { args: ["Select a new version (currently 1.0.0)"], returns: "1.0.1" }
+        ]],
+        [PromptUtilities, "confirm", { valueCallback: true }, [
+          { args: ["Are you sure you want to publish the above changes?"], returns: true }
+        ]],
+      ]);
+
+      publishCommand.runCommand(exitWithCode(0, (err) => {
+        if (err) return done(err);
+
+        try {
+          assert.ok(!pathExists.sync(path.join(testDir, "asini-debug.log")));
+          assert.equal(require(path.join(testDir, "asini.json")).version, "1.0.1");
+
+          assert.equal(require(path.join(testDir, "packages/package-1/package.json")).version, "1.0.1");
+          assert.equal(require(path.join(testDir, "packages/package-2/package.json")).version, "1.0.1");
+          assert.equal(require(path.join(testDir, "packages/package-3/package.json")).version, "1.0.1");
+          assert.equal(require(path.join(testDir, "packages/package-4/package.json")).version, "1.0.1");
+
+          assert.equal(require(path.join(testDir, "packages/package-2/package.json")).dependencies["package-1"], "^1.0.1");
+          assert.equal(require(path.join(testDir, "packages/package-3/package.json")).devDependencies["package-2"], "^1.0.1");
+          assert.equal(require(path.join(testDir, "packages/package-4/package.json")).dependencies["package-1"], "^0.0.0");
+
+          done();
+        } catch (err) {
+          done(err);
+        }
+      }));
+    });
+  });
+
+
+
+  /** =========================================================================
    * NORMAL - NPM TAG
    * ======================================================================= */
 

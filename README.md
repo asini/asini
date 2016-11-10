@@ -224,6 +224,8 @@ When run with this flag, `publish` will publish to npm without running any of th
 
 > Only publish to npm; skip committing, tagging, and pushing git changes (this only affects publish).
 
+This may be configured in asini.json via `skipGit` or `command.publish.skipGit`.
+
 #### --skip-npm
 
 ```sh
@@ -244,6 +246,8 @@ This flag can be combined with `--skip-git` to _just_ update versions and
 dependencies, without committing, tagging, pushing or publishing.
 
 > Only update versions and dependencies; don't actually publish (this only affects publish).
+
+This may be configured in asini.json via `skipNpm` or `command.publish.skipNpm`.
 
 #### --force-publish [packages]
 

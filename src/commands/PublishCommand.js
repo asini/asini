@@ -11,6 +11,11 @@ import { EOL } from "os";
 
 export default class PublishCommand extends Command {
   initialize(callback) {
+    const opts = this.getOptions();
+
+    // These can come in from asini.json or from flags on the command-line.
+    ["skipNpm", "skipGit"].forEach((opt) => this[opt] = opts[opt]);
+
     if (this.flags.canary) {
       this.logger.info("Publishing canary build");
     }
@@ -80,7 +85,7 @@ export default class PublishCommand extends Command {
       }
 
       this.updateUpdatedPackages();
-      if (!this.flags.skipGit) {
+      if (!this.skipGit) {
         this.commitAndTagUpdates();
       }
     } catch (err) {
@@ -88,7 +93,7 @@ export default class PublishCommand extends Command {
       return;
     }
 
-    if (this.flags.skipNpm) {
+    if (this.skipNpm) {
       callback(null, true);
     } else {
       this.publishPackagesToNpm(callback);
@@ -118,7 +123,7 @@ export default class PublishCommand extends Command {
           return;
         }
 
-        if (!(this.flags.canary || this.flags.skipGit)) {
+        if (!(this.flags.canary || this.skipGit)) {
           this.logger.info("Pushing tags to git...");
           this.logger.newLine();
           GitUtilities.pushWithTags(this.tags);
@@ -243,7 +248,7 @@ export default class PublishCommand extends Command {
   updateVersionInAsiniJson() {
     this.repository.asiniJson.version = this.masterVersion;
     FileSystemUtilities.writeFileSync(this.repository.asiniJsonLocation, JSON.stringify(this.repository.asiniJson, null, "  "));
-    if (!this.flags.skipGit) {
+    if (!this.skipGit) {
       GitUtilities.addFile(this.repository.asiniJsonLocation);
     }
   }
@@ -271,7 +276,7 @@ export default class PublishCommand extends Command {
       changedFiles.push(packageJsonLocation);
     });
 
-    if (!(this.flags.canary || this.flags.skipGit)) {
+    if (!(this.flags.canary || this.skipGit)) {
       changedFiles.forEach(GitUtilities.addFile);
     }
   }
