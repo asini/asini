@@ -1,3 +1,15 @@
+## v1.2.0 (2016-11-10)
+
+#### Enhancement
+  * [#52](https://github.com/asini/asini/pull/52) Support more publish config via asini.json. ([@gigabo](https://github.com/gigabo))
+
+#### Bug fix
+  * [#51](https://github.com/asini/asini/pull/51) List private packages in `asini ls` output. ([@gigabo](https://github.com/gigabo))
+
+#### Commiters: 2
+- Aleksey Guryanov ([Guria](https://github.com/Guria))
+- Bo Borgerson ([gigabo](https://github.com/gigabo))
+
 ## v1.1.0 (2016-10-26)
 
 #### Enhancement
