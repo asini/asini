@@ -1,3 +1,16 @@
+## v1.3.0 (2016-11-18)
+
+#### Enhancement
+  * [#58](https://github.com/asini/asini/pull/58) Do not require asini init when major versions match. ([@evocateur](https://github.com/evocateur))
+  * [#59](https://github.com/asini/asini/pull/59) Properly sort added dependency during init. ([@evocateur](https://github.com/evocateur))
+
+#### Bug fix
+  * [#55](https://github.com/asini/asini/pull/55) Don't fail bootstrap/run with no packages. ([@gigabo](https://github.com/gigabo))
+
+#### Commiters: 2
+- Bo Borgerson ([gigabo](https://github.com/gigabo))
+- Daniel Stockman ([evocateur](https://github.com/evocateur))
+
 ## v1.2.0 (2016-11-10)
 
 #### Enhancement
