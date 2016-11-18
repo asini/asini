@@ -47,6 +47,12 @@ export default class BootstrapCommand extends Command {
 
   runScriptInPackages(scriptName, callback) {
     const packages = this.filteredPackages.slice();
+
+    // If we don't have any packages, then we have nothing to do.
+    if (!packages.length) {
+      return callback();
+    }
+
     const batches = PackageUtilities.topologicallyBatchPackages(packages, this.logger);
 
     this.progressBar.init(packages.length);
