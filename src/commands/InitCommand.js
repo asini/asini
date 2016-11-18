@@ -32,23 +32,17 @@ export default class InitCommand extends Command {
     }
 
     let targetDependencies;
-    if (packageJson.dependencies && packageJson.dependencies.lerna) {
-      // lerna is a dependency in the current project
-      targetDependencies = packageJson.dependencies;
+    if (packageJson.dependencies && packageJson.dependencies.asini) {
+      // asini is a dependency in the current project
+      targetDependencies = "dependencies";
     } else {
-      // lerna is a devDependency or no dependency, yet
+      // asini is a devDependency or no dependency, yet
       if (!packageJson.devDependencies) packageJson.devDependencies = {};
-      targetDependencies = packageJson.devDependencies;
+      targetDependencies = "devDependencies";
     }
 
-    objectAssignSorted(targetDependencies, {
-      lerna: this.lernaVersion
-    });
-
-    // if (!packageJson.private) packageJson.private = true;
-    if (!packageJson.devDependencies) packageJson.devDependencies = {};
-
-    objectAssignSorted(packageJson.devDependencies, {
+    // updated object must replace targetDependencies, it will not change by reference
+    packageJson[targetDependencies] = objectAssignSorted(packageJson[targetDependencies], {
       asini: this.asiniVersion
     });
 
