@@ -1,0 +1,7 @@
+{
+  "name": "test",
+  "devDependencies": {
+    "asini": "500.0.0",
+    "external": "^1.0.0"
+  }
+}
