@@ -221,6 +221,23 @@ describe("Repository", () => {
     });
   });
 
+  describe("hasCompatibleLocalAsini()", () => {
+    it("should return true when asini major version matches", () => {
+      const repo = new Repository();
+      assert.strictEqual(repo.hasCompatibleLocalAsini("500.250.0"), true);
+    });
+
+    it("should return true when asiniVersion is identical", () => {
+      const repo = new Repository();
+      assert.strictEqual(repo.hasCompatibleLocalAsini("500.0.0"), true);
+    });
+
+    it("should return false when asini major version does not match", () => {
+      const repo = new Repository();
+      assert.strictEqual(repo.hasCompatibleLocalAsini("1000.0.0"), false);
+    });
+  });
+
   describe("hasDependencyInstalled()", () => {
     it("should match installed dependency", () => {
       const repo = new Repository();

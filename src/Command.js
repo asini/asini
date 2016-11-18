@@ -104,10 +104,10 @@ export default class Command {
 
     if (
       process.env.NODE_ENV !== "test" &&
-      this.asiniVersion !== this.repository.asiniVersion
+      !this.repository.hasCompatibleLocalAsini(this.asiniVersion)
     ) {
       this.logger.warn(
-        `Asini version mismatch: The current version of asini is ${this.asiniVersion}, ` +
+        `Asini major version mismatch: The current version of asini is ${this.asiniVersion}, ` +
         `but the Asini version in \`asini.json\` is ${this.repository.asiniVersion}. ` +
         `You can either run \`asini init\` again or install \`asini@${this.repository.asiniVersion}\`.`
       );

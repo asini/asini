@@ -5,6 +5,7 @@ import Package from "./Package";
 import NpmUtilities from "./NpmUtilities";
 import path from "path";
 import logger from "./logger";
+import semver from "semver";
 
 const DEFAULT_PACKAGE_GLOB = "packages/*/package.json";
 
@@ -85,6 +86,12 @@ export default class Repository {
     this._packages = PackageUtilities.getPackages(this);
     this._packageGraph = PackageUtilities.getPackageGraph(this._packages);
     this._filteredPackages = PackageUtilities.getFilteredPackages(this._packages, {scope, ignore});
+  }
+
+  hasCompatibleLocalAsini(needVersion) {
+    return semver.satisfies(
+      this.asiniVersion, `^${semver.major(needVersion)}`
+    );
   }
 
   hasDependencyInstalled(dependency, version) {
