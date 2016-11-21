@@ -2,7 +2,6 @@ import objectAssign from "object-assign";
 import path from "path";
 import semver from "semver";
 import NpmUtilities from "./NpmUtilities";
-import logger from "./logger";
 
 export default class Package {
   constructor(pkg, location) {
@@ -82,10 +81,9 @@ export default class Package {
   /**
    * Determine if a dependency version satisfies the requirements of this package
    * @param {Package} dependency
-   * @param {Boolean} showWarning
    * @returns {Boolean}
    */
-  hasMatchingDependency(dependency, showWarning = false) {
+  hasMatchingDependency(dependency) {
     const expectedVersion = this.allDependencies[dependency.name];
     const actualVersion = dependency.version;
 
@@ -96,14 +94,6 @@ export default class Package {
     // check if semantic versions are compatible
     if (semver.satisfies(actualVersion, expectedVersion)) {
       return true;
-    }
-
-    if (showWarning) {
-      logger.warning(
-        `Version mismatch inside "${this.name}". ` +
-        `Depends on "${dependency.name}@${expectedVersion}" ` +
-        `instead of "${dependency.name}@${actualVersion}".`
-      );
     }
 
     return false;
