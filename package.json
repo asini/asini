@@ -23,13 +23,13 @@
     "url": "https://github.com/asini/asini/issues"
   },
   "dependencies": {
-    "async": "^1.5.0",
+    "async": "^2.1.2",
     "chalk": "^1.1.1",
     "cmd-shim": "^2.0.2",
     "command-join": "^1.1.1",
-    "cross-spawn": "^4.0.0",
+    "cross-spawn": "^5.0.1",
     "glob": "^7.0.6",
-    "inquirer": "^0.12.0",
+    "inquirer": "^1.2.3",
     "isarray": "^2.0.1",
     "lodash.find": "^4.3.0",
     "lodash.unionwith": "^4.2.0",
@@ -40,12 +40,12 @@
     "object-assign": "^4.0.1",
     "object-assign-sorted": "^1.0.0",
     "pad": "^1.0.0",
-    "path-exists": "^2.1.0",
+    "path-exists": "^3.0.0",
     "progress": "^1.1.8",
     "read-cmd-shim": "^1.0.1",
     "rimraf": "^2.4.4",
     "semver": "^5.1.0",
-    "signal-exit": "^2.1.2",
+    "signal-exit": "^3.0.1",
     "sync-exec": "^0.6.2"
   },
   "bin": {
@@ -54,18 +54,18 @@
   "devDependencies": {
     "asini-changelog": "^1.3.0",
     "babel-cli": "^6.7.5",
-    "babel-eslint": "^6.0.2",
+    "babel-eslint": "^7.1.1",
     "babel-plugin-add-module-exports": "^0.2.1",
     "babel-plugin-transform-decorators-legacy": "^1.3.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-register": "^6.7.2",
-    "cross-env": "^1.0.8",
-    "eslint": "^2.3.0",
-    "eslint-config-babel": "^1.0.1",
-    "eslint-plugin-babel": "^3.3.0",
-    "eslint-plugin-flow-vars": "^0.5.0",
-    "fs-extra": "^0.30.0",
-    "mocha": "^2.4.5",
-    "normalize-newline": "^2.1.0"
+    "cross-env": "^3.1.3",
+    "eslint": "^3.10.2",
+    "eslint-config-babel": "^3.0.0",
+    "eslint-plugin-babel": "^4.0.0",
+    "eslint-plugin-flowtype": "^2.25.0",
+    "fs-extra": "^1.0.0",
+    "mocha": "^3.1.2",
+    "normalize-newline": "^3.0.0"
   }
 }
