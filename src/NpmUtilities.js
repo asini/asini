@@ -73,9 +73,9 @@ export default class NpmUtilities {
 
   @logger.logifyAsync
   static getLatestVersion(pkg, callback) {
-    ChildProcessUtilities.exec("npm show --json " + pkg, {}, (err, val) => {
+    ChildProcessUtilities.exec(`npm show ${pkg} version`, {}, (err, val) => {
       if (err) callback(err);
-      callback(null, JSON.parse(val).version);
+      callback(null, val);
     });
   }
 
