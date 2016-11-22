@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-var */
+// file must remain raw ES5
+
 var asini = require("../lib/index");
 var logger = require("../lib/logger");
 var chalk = require("chalk");
