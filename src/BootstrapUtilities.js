@@ -1,7 +1,6 @@
 import FileSystemUtilities from "./FileSystemUtilities";
 import PackageUtilities from "./PackageUtilities";
 import NpmUtilities from "./NpmUtilities";
-import Command from "./Command";
 import find from "lodash.find";
 import async from "async";
 import path from "path";
@@ -272,4 +271,4 @@ export default class BootstrapUtilities {
     });
     async.series(actions, callback);
   }
-};
+}
