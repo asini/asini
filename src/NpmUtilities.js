@@ -75,7 +75,7 @@ export default class NpmUtilities {
   static getLatestVersion(pkg, callback) {
     ChildProcessUtilities.exec(`npm show ${pkg} version`, {}, (err, val) => {
       if (err) callback(err);
-      callback(null, val);
+      callback(null, val.trim());
     });
   }
 
