@@ -6,10 +6,11 @@
   "scripts": {
     "build": "babel src -d lib",
     "dev": "babel -w src -d lib",
-    "lint": "eslint src test",
-    "fix": "eslint src test --fix",
+    "lint": "eslint . --cache",
+    "fix": "eslint . --fix",
+    "pretest": "npm run lint",
     "test": "mocha -t 5000",
-    "ci": "npm run lint && cross-env DEBUG_CALLS=true npm run test",
+    "ci": "cross-env DEBUG_CALLS=true npm test",
     "changelog": "asini-changelog",
     "prepublish": "npm run build"
   },
