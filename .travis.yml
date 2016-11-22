@@ -15,7 +15,7 @@ node_js:
 
 
 install:
-  - test -e $(npm config get prefix)/bin/asini && npm up -g asini || npm i -g asini
+  - npm i -g asini
   - echo $(which asini)
   - asini bootstrap
 before_script:
