@@ -11,6 +11,7 @@
   "changelog": {
     "repo": "asini/asini",
     "labels": {
+      "breaking change": "Breaking change",
       "enhancement": "Enhancement",
       "bug": "Bug fix"
     },
