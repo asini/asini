@@ -1,0 +1,10 @@
+module.exports = {
+  "extends": "babel",
+  "rules": {
+    "no-confusing-arrow": 0,
+    "max-len": 0
+  },
+  "env": {
+    "node": true
+  }
+};

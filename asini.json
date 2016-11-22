@@ -1,5 +1,6 @@
 {
   "asini": "1.2.0",
+  "hoist": true,
   "packages": [
     {
       "glob": "package.json"

@@ -17,7 +17,7 @@ export default class Changelog {
 
     if (!config) {
       throw new ConfigurationError(
-        "Missing changelog config in `asini.json`.\n"+
+        "Missing changelog config in `asini.json`.\n" +
         "See docs for setup: https://github.com/asini/asini/tree/master/packages/asini-changelog#asini-changelog"
       );
     }
@@ -43,17 +43,17 @@ export default class Changelog {
 
     progressBar.init(commitsByCategory.length);
 
-    commitsByCategory.filter(category => {
+    commitsByCategory.filter((category) => {
       return category.commits.length > 0;
-    }).forEach(category => {
+    }).forEach((category) => {
       progressBar.tick(category.heading);
 
       const commitsByPackage = {};
 
-      category.commits.forEach(commit => {
+      category.commits.forEach((commit) => {
 
         // Array of unique packages.
-        var changedPackages = Object.keys(
+        const changedPackages = Object.keys(
           execSync("git show -m --name-only --pretty='format:' --first-parent " + commit.commitSHA)
           // turn into an array
           .split("\n")
@@ -67,8 +67,8 @@ export default class Changelog {
         );
 
         const heading = changedPackages.length > 0
-          ?"* "+changedPackages.map(pkg => "`" + pkg + "`").join(", ")
-          :"* Other"; // No changes to packages, but still relevant.
+          ? "* " + changedPackages.map((pkg) => "`" + pkg + "`").join(", ")
+          : "* Other"; // No changes to packages, but still relevant.
 
         if (!commitsByPackage[heading]) {
           commitsByPackage[heading] = [];
@@ -81,15 +81,15 @@ export default class Changelog {
       markdown += "\n";
       markdown += "#### " + category.heading;
 
-      Object.keys(commitsByPackage).forEach(heading => {
-        markdown += "\n"+heading;
+      Object.keys(commitsByPackage).forEach((heading) => {
+        markdown += "\n" + heading;
 
-        commitsByPackage[heading].forEach(commit => {
+        commitsByPackage[heading].forEach((commit) => {
 
           markdown += "\n  * ";
 
           if (commit.number) {
-            var prUrl = this.remote.getBasePullRequestUrl() + commit.number;
+            const prUrl = this.remote.getBasePullRequestUrl() + commit.number;
             markdown += "[#" + commit.number + "](" + prUrl + ") ";
           }
 
@@ -117,23 +117,21 @@ export default class Changelog {
   }
 
   getListOfCommits() {
-    var lastTag = this.getLastTag();
-    var commits = execSync("git log --oneline " + lastTag + "..").split("\n");
-    return commits;
+    return execSync("git log --oneline " + this.getLastTag() + "..").split("\n");
   }
 
   getCommitters(commits) {
-    var committers = {}
+    const committers = {};
 
-    commits.forEach(commit => {
-      const login = (commit.user||{}).login;
-      if (login && !committers[login]){
+    commits.forEach((commit) => {
+      const login = (commit.user || {}).login;
+      if (login && !committers[login]) {
         const user = this.remote.getUserData(login);
         committers[login] = `${user.name} ([${login}](${user.html_url}))`;
       }
     });
 
-    return Object.keys(committers).map(k => committers[k]).sort();
+    return Object.keys(committers).map((k) => committers[k]).sort();
   }
 
   getCommitInfo() {
@@ -141,19 +139,20 @@ export default class Changelog {
 
     progressBar.init(commits.length);
 
-    var logs = commits.map(commit => {
+    const logs = commits.map((commit) => {
 
-      var sha = commit.slice(0, 7);
-      var message = commit.slice(8);
-      var response;
+      const sha = commit.slice(0, 7);
+      const message = commit.slice(8);
+      let response, issueNumber;
       progressBar.tick(sha);
 
-      var mergeCommit = message.match(/\(#(\d+)\)$/);
+      const mergeCommit = message.match(/\(#(\d+)\)$/);
 
       if (message.indexOf("Merge pull request ") === 0) {
-        var start = message.indexOf("#") + 1;
-        var end = message.slice(start).indexOf(" ");
-        var issueNumber = message.slice(start, start + end);
+        const start = message.indexOf("#") + 1;
+        const end = message.slice(start).indexOf(" ");
+
+        issueNumber = message.slice(start, start + end);
 
         response = this.remote.getIssueData(issueNumber);
         response.commitSHA = sha;
@@ -179,11 +178,11 @@ export default class Changelog {
   }
 
   getCommitsByCategory(logs) {
-    var categories = this.remote.getLabels().map(label => {
-      var commits = [];
+    return this.remote.getLabels().map((label) => {
+      const commits = [];
 
       logs.forEach(function(log) {
-        var labels = log.labels.map(function(label) {
+        const labels = log.labels.map(function(label) {
           return label.name;
         });
 
@@ -197,7 +196,5 @@ export default class Changelog {
         commits: commits
       };
     });
-
-    return categories;
   }
 }

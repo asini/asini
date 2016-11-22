@@ -36,6 +36,6 @@ export default class GithubAPI {
       user  : `/users/${key}`
     }[type];
     const url = "https://api.github.com" + path;
-    return execSync("curl -H 'Authorization: token " + process.env.GITHUB_AUTH + "' --silent " + url)
+    return execSync("curl -H 'Authorization: token " + process.env.GITHUB_AUTH + "' --silent " + url);
   }
 }

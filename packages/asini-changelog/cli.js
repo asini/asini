@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+/* eslint-disable no-var */
+// file must remain raw ES5
+
 var chalk = require("chalk");
 var lib = require(".");
 
