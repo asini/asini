@@ -1,20 +1,20 @@
-import FileSystemUtilities from "../FileSystemUtilities";
-import PackageUtilities from "../PackageUtilities";
-import NpmUtilities from "../NpmUtilities";
+import FileSystemUtilities from "./FileSystemUtilities";
+import PackageUtilities from "./PackageUtilities";
+import NpmUtilities from "./NpmUtilities";
+import Command from "./Command";
 import find from "lodash.find";
 import async from "async";
 import path from "path";
 import semver from "semver";
 
-export default (BaseClass) => class extends BaseClass {
-
-  hoistedDirectory(dependency) {
-    return path.join(this.repository.rootPath, "node_modules", dependency);
+export default class BootstrapUtilities {
+  static hoistedDirectory(rootPath, dependency) {
+    return path.join(rootPath, "node_modules", dependency);
   }
 
-  hoistedPackageJson(dependency) {
+  static hoistedPackageJson(rootPath, dependency) {
     try {
-      return require(path.join(this.hoistedDirectory(dependency), "package.json"));
+      return require((BootstrapUtilities.hoistedDirectory(rootPath, dependency), "package.json"));
     } catch (e) {
       // Pass.
     }
@@ -25,10 +25,10 @@ export default (BaseClass) => class extends BaseClass {
    * @param {Array.<Package>} packages An array of packages
    * @returns {Object}
    */
-  getDependenciesToInstall(packages = []) {
+  static getDependenciesToInstall(command, packages = []) {
 
     // find package by name
-    const findPackage = (name, version) => find(this.packages, (pkg) => {
+    const findPackage = (name, version) => find(command.packages, (pkg) => {
       return pkg.name === name && (!version || semver.satisfies(pkg.version, version));
     });
 
@@ -36,7 +36,7 @@ export default (BaseClass) => class extends BaseClass {
 
     // Configuration for what packages to hoist may be in asini.json or it may
     // come in as command line options.
-    const {hoist: scope, nohoist: ignore} = this.getOptions();
+    const {hoist: scope, nohoist: ignore} = command.getOptions();
 
     // This will contain entries for each hoistable dependency.
     const root = [];
@@ -121,10 +121,10 @@ export default (BaseClass) => class extends BaseClass {
         // Get the version required by the repo root (if any).
         // If the root doesn't have a dependency on this package then we'll
         // install the most common dependency there.
-        rootVersion = this.repository.package.allDependencies[name] || commonVersion;
+        rootVersion = command.repository.package.allDependencies[name] || commonVersion;
 
         if (rootVersion !== commonVersion) {
-          this.logger.warn(
+          command.logger.warn(
             `The repository root depends on ${name}@${rootVersion}, ` +
             `which differs from the more common ${name}@${commonVersion}.`
           );
@@ -136,8 +136,8 @@ export default (BaseClass) => class extends BaseClass {
         root.push({
           name,
           dependents: (dependents[rootVersion] || [])
-            .map((dep) => this.packageGraph.get(dep).package),
-          dependency: this.repository.hasDependencyInstalled(name, rootVersion)
+            .map((dep) => command.packageGraph.get(dep).package),
+          dependency: command.repository.hasDependencyInstalled(name, rootVersion)
             ? null // Don't re-install if it's already there.
             : `${name}@${rootVersion}`,
         });
@@ -152,7 +152,7 @@ export default (BaseClass) => class extends BaseClass {
         dependents[version].forEach((pkg) => {
 
           if (rootVersion) {
-            this.logger.warn(
+            command.logger.warn(
               `"${pkg}" package depends on ${name}@${version}, ` +
               `which differs from the hoisted ${name}@${rootVersion}.`
             );
@@ -172,15 +172,15 @@ export default (BaseClass) => class extends BaseClass {
    * Install external dependencies for all packages
    * @param {Function} callback
    */
-  installExternalDependencies(packages, callback) {
-    const {leaves, root} = this.getDependenciesToInstall(packages);
+  static installExternalDependencies(command, packages, callback) {
+    const {leaves, root} = BootstrapUtilities.getDependenciesToInstall(command, packages);
 
     const actions = [];
 
     // Start root install first, if any, since it's likely to take the longest.
     if (Object.keys(root).length) {
       actions.push((cb) => NpmUtilities.installInDir(
-        this.repository.rootPath,
+        command.repository.rootPath,
         root.map(({dependency}) => dependency).filter((dep) => dep),
         (err) => {
           if (err) return cb(err);
@@ -188,18 +188,18 @@ export default (BaseClass) => class extends BaseClass {
           // Link binaries into dependent packages so npm scripts will have
           // access to them.
           async.series(root.map(({name, dependents}) => (cb) => {
-            const {bin} = (this.hoistedPackageJson(name) || {});
+            const {bin} = (BootstrapUtilities.hoistedPackageJson(name) || {});
             if (bin) {
               async.series(dependents.map((pkg) => (cb) => {
-                const src  = this.hoistedDirectory(name);
+                const src  = command.hoistedDirectory(name);
                 const dest = pkg.nodeModulesLocation;
-                this.createBinaryLink(src, dest, name, bin, cb);
+                BootstrapUtilities.createBinaryLink(src, dest, name, bin, cb);
               }), cb);
             } else {
               cb();
             }
           }), (err) => {
-            this.progressBar.tick("Install hoisted");
+            command.progressBar.tick("Install hoisted");
             cb(err);
           });
         }
@@ -214,7 +214,7 @@ export default (BaseClass) => class extends BaseClass {
             FileSystemUtilities.rimraf(path.join(dir, name), cb);
           }), cb);
         }), (err) => {
-          this.progressBar.tick("Prune hoisted");
+          command.progressBar.tick("Prune hoisted");
           cb(err);
         });
       });
@@ -222,23 +222,23 @@ export default (BaseClass) => class extends BaseClass {
 
     // Install anything that needs to go into the leaves.
     Object.keys(leaves)
-      .map((pkgName) => ({pkg: this.packageGraph.get(pkgName).package, deps: leaves[pkgName]}))
+      .map((pkgName) => ({pkg: command.packageGraph.get(pkgName).package, deps: leaves[pkgName]}))
       .forEach(({pkg, deps}) => actions.push(
         (cb) => NpmUtilities.installInDir(pkg.location, deps, (err) => {
-          this.progressBar.tick(pkg.name);
+          command.progressBar.tick(pkg.name);
           cb(err);
         })
       ));
 
     if (actions.length) {
 
-      this.logger.info("Installing external dependencies");
+      command.logger.info("Installing external dependencies");
 
-      this.progressBar.init(actions.length);
+      command.progressBar.init(actions.length);
     }
 
-    async.parallelLimit(actions, this.concurrency, (err) => {
-      this.progressBar.terminate();
+    async.parallelLimit(actions, command.concurrency, (err) => {
+      command.progressBar.terminate();
       callback(err);
     });
   }
@@ -251,7 +251,7 @@ export default (BaseClass) => class extends BaseClass {
    * @param {String|Object} bin
    * @param {Function} callback
    */
-  createBinaryLink(src, dest, name, bin, callback) {
+  static createBinaryLink(src, dest, name, bin, callback) {
     const destBinFolder = path.join(dest, ".bin");
     // The `bin` in a package.json may be either a string or an object.
     // Normalize to an object.
