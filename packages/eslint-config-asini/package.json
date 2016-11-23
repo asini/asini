@@ -4,7 +4,7 @@
   "description": "Shared eslint config for all Asini packages",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests here...\""
+    "test": "node test.js"
   },
   "repository": {
     "type": "git",
