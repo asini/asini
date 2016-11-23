@@ -4,14 +4,14 @@
   "description": "Tool for managing JavaScript projects with multiple packages",
   "main": "lib/index.js",
   "scripts": {
-    "bootstrap": "bin/asini.js bootstrap",
+    "bootstrap": "node bin/asini.js bootstrap",
     "build": "babel src -d lib",
     "dev": "babel -w src -d lib",
     "lint": "eslint . --cache",
     "fix": "eslint . --fix",
     "pretest": "npm run lint",
     "test": "mocha -t 5000",
-    "test-all": "bin/asini.js run test",
+    "test-all": "node bin/asini.js run test",
     "changelog": "asini-changelog",
     "prepublish": "npm run build"
   },
