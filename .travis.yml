@@ -5,8 +5,6 @@ language: node_js
 cache:
   directories:
   - node_modules
-  - $(npm config get prefix)/bin/asini
-  - $(npm config get prefix)/lib/node_modules/asini
 
 node_js:
  - '4'
@@ -15,13 +13,12 @@ node_js:
 
 
 install:
-  - npm i -g asini
-  - echo $(which asini)
-  - asini bootstrap
+  - npm i
+  - bin/asini.js bootstrap
 before_script:
   - git config --global user.email test@example.com
   - git config --global user.name "Tester McPerson"
-script: asini run test
+script: bin/asini.js run test
 
 notifications:
   slack:
