@@ -14,11 +14,11 @@ node_js:
 
 install:
   - npm i
-  - bin/asini.js bootstrap
+  - npm run bootstrap
 before_script:
   - git config --global user.email test@example.com
   - git config --global user.name "Tester McPerson"
-script: bin/asini.js run test
+script: npm run test-all
 
 notifications:
   slack:
