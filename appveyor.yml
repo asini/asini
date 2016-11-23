@@ -10,12 +10,12 @@ init:
 install:
   - ps: Install-Product node $env:nodejs_version
   - npm i
-  - bin/asini.js bootstrap
+  - node bin/asini.js bootstrap
 
 test_script:
   - node --version
   - npm --version
-  - bin/asini.js run test
+  - node bin/asini.js run test
 
 # Don't actually build.
 build: off
