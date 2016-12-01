@@ -11,10 +11,14 @@ node_js:
  - '5'
  - '6'
 
+
+install:
+  - npm i
+  - npm run bootstrap
 before_script:
   - git config --global user.email test@example.com
   - git config --global user.name "Tester McPerson"
-script: npm run ci
+script: npm run test-all
 
 notifications:
   slack:

@@ -9,12 +9,13 @@ init:
 
 install:
   - ps: Install-Product node $env:nodejs_version
-  - npm install
+  - npm i
+  - npm run bootstrap
 
 test_script:
   - node --version
   - npm --version
-  - npm run ci
+  - npm run test-all
 
 # Don't actually build.
 build: off
