@@ -41,6 +41,8 @@ export default class EjectCommand extends Command {
       this.logger.info(`  - ${pkg._location} -> ${to}`);
       callback(null, true);
     } else {
+      // if we think this is a good idea, migrate it with the git history:
+      // http://stackoverflow.com/questions/359424/detach-move-subdirectory-into-separate-git-repository/17864475#17864475
       FileSystemUtilities.renameSync(pkg._location, to, callback);
     }
   }
