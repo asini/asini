@@ -1,4 +1,3 @@
-import ChildProcessUtilities from "../ChildProcessUtilities";
 import Command from "../Command";
 import FileSystemUtilities from "../FileSystemUtilities";
 import async from "async";
@@ -21,7 +20,7 @@ export default class EjectCommand extends Command {
 
   execute(callback) {
     if (this.pkg) {
-      const pkg = this.filteredPackages.filter(pkg => pkg._package.name === this.pkg)[0];
+      const pkg = this.filteredPackages.filter((pkg) => pkg._package.name === this.pkg)[0];
 
       if (!pkg) {
         callback(`no such package to eject ${this.pkg}`);
@@ -40,8 +39,9 @@ export default class EjectCommand extends Command {
 
     if (this.dry) {
       this.logger.info(`  - ${pkg._location} -> ${to}`);
+      callback(0);
     } else {
-      FileSystemUtilities.renameSync(pkg._location, to);
+      FileSystemUtilities.renameSync(pkg._location, to, callback);
     }
   }
 }
