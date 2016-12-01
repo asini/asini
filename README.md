@@ -384,6 +384,19 @@ repo.  Each commit is modified to make changes relative to the package
 directory.  So, for example, the commit that added `package.json` will
 instead add `packages/<directory-name>/package.json`.
 
+### eject
+
+```sh
+$ asini eject <package-name> --to <path-to-external-directory>
+```
+
+Eject the package at `<package-name>` into a new directory, at
+`<path-to-external-directory>`, if it is given, or to the current user's home
+directory, if it is not.
+
+This allows you to move packages out of an existing asini repository and into
+its own repository, in case it turns out to be easier to manage on its own.
+
 ## Misc
 
 Asini will log to a `asini-debug.log` file (same as `npm-debug.log`) when it encounters an error running a command.
