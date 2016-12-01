@@ -48,7 +48,8 @@
     "rimraf": "^2.5.2",
     "semver": "^5.1.0",
     "signal-exit": "^3.0.1",
-    "sync-exec": "^0.6.2"
+    "sync-exec": "^0.6.2",
+    "user-home": "^2.0.0"
   },
   "bin": {
     "asini": "./bin/asini.js"
