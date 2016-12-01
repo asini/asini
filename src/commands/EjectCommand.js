@@ -12,7 +12,7 @@ export default class EjectCommand extends Command {
     this.pkg = this.input[0];
 
     if (this.dry) {
-      console.log("The following directories would be moved");
+      this.logger.info("The following directories would be moved");
     }
 
     callback(null, true);
@@ -39,7 +39,7 @@ export default class EjectCommand extends Command {
 
     if (this.dry) {
       this.logger.info(`  - ${pkg._location} -> ${to}`);
-      callback(0);
+      callback(null, true);
     } else {
       FileSystemUtilities.renameSync(pkg._location, to, callback);
     }
