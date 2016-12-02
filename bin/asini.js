@@ -17,8 +17,8 @@ var cli = meow([
   "  publish    Publish updated packages to npm",
   "  updated    Check which packages have changed since the last release",
   "  import     Import a package with git history from an external repository",
+  "  export     Remove all packages or a single package from the repository",
   "  clean      Remove the node_modules directory from all packages",
-  "  eject      Remove all packages or a single package from the repository",
   "  diff       Diff all packages or a single package since the last release",
   "  init       Initialize an asini repo",
   "  run        Run npm script in each package",
@@ -40,8 +40,7 @@ var cli = meow([
   "  --repo-version       Specify repo version to publish",
   "  --concurrency        How many threads to use if asini parallelises the tasks (defaults to 4)",
   "  --loglevel           What level of logs to report (defaults to \"info\").  On failure, all logs are written to asini-debug.log in the current working directory.",
-  "  --dry                Don't eject any packages, only log where they would be moved",
-  "  --to                 Specify the directory to eject packages to",
+  "  --dry-run            Only log what would have changed instead of commiting changes (export only)",
 ], {
   alias: {
     independent: "i",

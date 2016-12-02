@@ -1,23 +1,23 @@
 import assert from "assert";
 import exitWithCode from "./_exitWithCode";
 import initFixture from "./_initFixture";
-import EjectCommand from "../src/commands/EjectCommand";
+import ExportCommand from "../src/commands/ExportCommand";
 import logger from "../src/logger";
 import stub from "./_stub";
 
-describe("EjectCommand", () => {
+describe("ExportCommand", () => {
 
   describe("in a basic repo", () => {
     beforeEach((done) => {
-      initFixture("EjectCommand/basic", done);
+      initFixture("ExportCommand/basic", done);
     });
 
-    it("should eject a single package", (done) => {
+    it("should export a single package", (done) => {
       const pkg = "package-1";
-      const ejectCommand = new EjectCommand([pkg], {dry: true});
+      const exportCommand = new ExportCommand([pkg], {"dry-run": true});
 
-      ejectCommand.runValidations();
-      ejectCommand.runPreparations();
+      exportCommand.runValidations();
+      exportCommand.runPreparations();
 
       let index = 0;
       const patterns = [
@@ -29,14 +29,14 @@ describe("EjectCommand", () => {
         index++;
       });
 
-      ejectCommand.runCommand(exitWithCode(0, done));
+      exportCommand.runCommand(exitWithCode(0, done));
     });
 
-    it("should eject all packages", (done) => {
-      const ejectCommand = new EjectCommand([], {dry: true});
+    it("should export all packages", (done) => {
+      const exportCommand = new ExportCommand([], {"dry-run": true});
 
-      ejectCommand.runValidations();
-      ejectCommand.runPreparations();
+      exportCommand.runValidations();
+      exportCommand.runPreparations();
 
       let index = 0;
       const patterns = [
@@ -51,16 +51,16 @@ describe("EjectCommand", () => {
         index++;
       });
 
-      ejectCommand.runCommand(exitWithCode(0, done));
+      exportCommand.runCommand(exitWithCode(0, done));
     });
 
     it("should allow you to specify a target directory", (done) => {
-      const to = "/my/really/great/path";
+      const to = "/path/to/the/mls/cup";
       const pkg = "package-2";
-      const ejectCommand = new EjectCommand([pkg], {dry: true, to});
+      const exportCommand = new ExportCommand([pkg, to], {"dry-run": true});
 
-      ejectCommand.runValidations();
-      ejectCommand.runPreparations();
+      exportCommand.runValidations();
+      exportCommand.runPreparations();
 
       let index = 0;
       const patterns = [
@@ -72,7 +72,7 @@ describe("EjectCommand", () => {
         index++;
       });
 
-      ejectCommand.runCommand(exitWithCode(0, done));
+      exportCommand.runCommand(exitWithCode(0, done));
     });
   });
 });

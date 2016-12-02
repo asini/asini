@@ -384,13 +384,13 @@ repo.  Each commit is modified to make changes relative to the package
 directory.  So, for example, the commit that added `package.json` will
 instead add `packages/<directory-name>/package.json`.
 
-### eject
+### export
 
 ```sh
-$ asini eject <package-name> --to <path-to-external-directory>
+$ asini export <package-name> --to <path-to-external-directory>
 ```
 
-Eject the package at `<package-name>` into a new directory, at
+Export the package at `<package-name>` into a new directory, at
 `<path-to-external-directory>`, if it is given, or to the current user's home
 directory, if it is not.
 

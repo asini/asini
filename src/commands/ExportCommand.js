@@ -4,12 +4,12 @@ import async from "async";
 import path from "path";
 import userHome from "user-home";
 
-export default class EjectCommand extends Command {
+export default class ExportCommand extends Command {
   initialize(callback) {
-    this.to = this.flags.to || userHome;
-    this.dry = this.flags.dry;
+    this.dry = this.flags["dry-run"];
 
     this.pkg = this.input[0];
+    this.to = this.input[1] || userHome;
 
     if (this.dry) {
       this.logger.info("The following directories would be moved");
@@ -19,14 +19,28 @@ export default class EjectCommand extends Command {
   }
 
   execute(callback) {
+    if (!this.to) {
+      // we actually know that this is an error earlier, during initialization,
+      // but calling the initialization errback with an error doesn't halt
+      // execution and print a nice error like the execute errback.
+      callback(new Error("no directory found to export to; please provide a second argument"));
+    }
+
     if (this.pkg) {
-      const pkg = this.filteredPackages.filter((pkg) => pkg._package.name === this.pkg)[0];
+      const pkg = this.packageGraph.get(this.pkg);
 
       if (!pkg) {
-        callback(`no such package to eject ${this.pkg}`);
+        if (this.to) {
+          callback(`no such package to export ${this.pkg}`);
+        } else {
+          // they're not exporting a single package to their home directory,
+          // they're exporting everything to a provided directory!
+          this.to = this.pkg;
+          this.pkg = undefined; // http://jsperf.com/delete-vs-undefined-vs-null/16
+        }
       }
 
-      this.runCommandInPackage(pkg, callback);
+      this.runCommandInPackage(pkg.package, callback);
     } else {
       async.parallelLimit(this.filteredPackages.map((pkg) => (cb) => {
         this.runCommandInPackage(pkg, cb);
