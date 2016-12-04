@@ -387,12 +387,15 @@ instead add `packages/<directory-name>/package.json`.
 ### export
 
 ```sh
-$ asini export <package-name> --to <path-to-external-directory>
+$ asini export <package-name> <path-to-external-directory>
 ```
 
 Export the package at `<package-name>` into a new directory, at
-`<path-to-external-directory>`, if it is given, or to the current user's home
-directory, if it is not.
+`<path-to-external-directory>`.  Both parameters are optional; if
+`<package-name>` is omitted, all packages are ejected; if
+`<path-to-external-directory>` is not provided, the package or packages are
+exported to the user's home directory.  Also respects the `dry-run` option, in
+which case it only logs what would be moved.
 
 This allows you to move packages out of an existing asini repository and into
 its own repository, in case it turns out to be easier to manage on its own.

@@ -3,6 +3,7 @@ import exitWithCode from "./_exitWithCode";
 import initFixture from "./_initFixture";
 import ExportCommand from "../src/commands/ExportCommand";
 import FileSystemUtilities from "../src/FileSystemUtilities";
+import ChildProcessUtilities from "../src/ChildProcessUtilities";
 import userHome from "user-home";
 import logger from "../src/logger";
 import stub from "./_stub";
@@ -23,21 +24,16 @@ describe("ExportCommand", () => {
       exportCommand.runValidations();
       exportCommand.runPreparations();
 
-      stub(FileSystemUtilities, "renameSync", () => {});
-      assertStubbedCalls([
-        [FileSystemUtilities, "renameSync", { nodeCallback: true }, [
-          { location: path.join(testDir, "package-1"), to: userHome }
-        ]],
-        [FileSystemUtilities, "renameSync", { nodeCallback: true }, [
-          { location: path.join(testDir, "package-2"), to: userHome }
-        ]],
-        [FileSystemUtilities, "renameSync", { nodeCallback: true }, [
-          { location: path.join(testDir, "package-3"), to: userHome }
-        ]],
-        [FileSystemUtilities, "renameSync", { nodeCallback: true }, [
-          { location: path.join(testDir, "package-4"), to: userHome }
-        ]]
-      ]);
+      stub(ChildProcessUtilities, "execSync", () => {});
+      stub(FileSystemUtilities, "mkdirSync", () => {});
+
+      assertStubbedCalls([]
+        .concat(getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to: userHome, pkg: "package-1" }))
+        .concat(getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to: userHome, pkg: "package-2" }))
+        .concat(getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to: userHome, pkg: "package-3" }))
+        .concat(getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to: userHome, pkg: "package-4" }))
+      );
+
 
       exportCommand.runCommand(exitWithCode(0, done));
     });
@@ -50,10 +46,10 @@ describe("ExportCommand", () => {
       exportCommand.runValidations();
       exportCommand.runPreparations();
 
-      stub(FileSystemUtilities, "renameSync", (location, to) => {
-        assert.ok(location.contains(pkg));
-        assert.equals(to, userHome);
-      });
+      stub(ChildProcessUtilities, "execSync", () => {});
+      stub(FileSystemUtilities, "mkdirSync", () => {});
+
+      assertStubbedCalls(getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to, pkg }));
 
       exportCommand.runCommand(exitWithCode(0, done));
     });
@@ -61,7 +57,7 @@ describe("ExportCommand", () => {
     describe("while doing a dry run", () => {
       it("should export a single package", (done) => {
         const pkg = "package-1";
-        const exportCommand = new ExportCommand([pkg], {"dry-run": true});
+        const exportCommand = new ExportCommand([pkg], {dryRun: true});
 
         exportCommand.runValidations();
         exportCommand.runPreparations();
@@ -80,7 +76,7 @@ describe("ExportCommand", () => {
       });
 
       it("should export all packages", (done) => {
-        const exportCommand = new ExportCommand([], {"dry-run": true});
+        const exportCommand = new ExportCommand([], {dryRun: true});
 
         exportCommand.runValidations();
         exportCommand.runPreparations();
@@ -104,7 +100,7 @@ describe("ExportCommand", () => {
       it("should allow you to specify a target directory", (done) => {
         const to = "/path/to/the/mls/cup";
         const pkg = "package-2";
-        const exportCommand = new ExportCommand([pkg, to], {"dry-run": true});
+        const exportCommand = new ExportCommand([pkg, to], {dryRun: true});
 
         exportCommand.runValidations();
         exportCommand.runPreparations();
@@ -124,3 +120,23 @@ describe("ExportCommand", () => {
     });
   });
 });
+
+function getStubbedAssertions({ FileSystemUtilities, ChildProcessUtilities, testDir, to, pkg }) {
+  return [
+    [ChildProcessUtilities, "execSync", { nodeCallback: true }, [
+      { args: [`git subtree split -P ${testDir}/packages/${pkg} -b export-${pkg}`] }
+    ]],
+    [FileSystemUtilities, "mkdirSync", { nodeCallback: true }, [
+      { filePath: path.join(to, pkg) }
+    ]],
+    [ChildProcessUtilities, "execSync", { nodeCallback: true }, [
+      { args: ["git init"] }
+    ]],
+    [ChildProcessUtilities, "execSync", { nodeCallback: true }, [
+      { args: [`git pull ${testDir} export-${pkg}`] }
+    ]],
+    [ChildProcessUtilities, "execSync", { nodeCallback: true }, [
+      { args: [`git rm -r ${testDir}/packages/${pkg}`] }
+    ]],
+  ];
+}
