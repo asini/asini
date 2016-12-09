@@ -325,6 +325,44 @@ $ asini ls
 
 List all of the public packages in the current Asini repo.
 
+### add
+
+```sh
+$ asini add lodash@4.16.4 --scope some-package --scope another-package
+```
+
+Add and install a dependency in packages.  Adds to _all_ packages by default.
+Limit to specific packages with `--scope`.  If no version is supplied the
+latest version will be used with a caret range.
+
+By default dependencies will be added to the main `dependencies` object.
+
+The following flags are available to specify other types of dependencies.
+
+#### --dev
+
+```sh
+$ asini add --dev
+```
+
+Add to `devDepenencies`.
+
+#### --peer
+
+```sh
+$ asini add --peer
+```
+
+Add to `peerDepenencies`.
+
+#### --optional
+
+```sh
+$ asini add --optional
+```
+
+Add to `optionalDepenencies`.
+
 ### run
 
 ```sh

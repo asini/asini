@@ -22,6 +22,7 @@ var cli = meow([
   "  init       Initialize an asini repo",
   "  run        Run npm script in each package",
   "  exec       Run a command in each package",
+  "  add        Add a dependency to each package (choose packages with --scope)",
   "  ls         List all public packages",
   "",
   "Options:",

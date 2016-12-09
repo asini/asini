@@ -2,6 +2,7 @@ import objectAssign from "object-assign";
 import path from "path";
 import semver from "semver";
 import NpmUtilities from "./NpmUtilities";
+import FileSystemUtilities from "./FileSystemUtilities";
 
 export default class Package {
   constructor(pkg, location) {
@@ -19,6 +20,10 @@ export default class Package {
 
   get nodeModulesLocation() {
     return path.join(this._location, "node_modules");
+  }
+
+  get packageJsonLocation() {
+    return path.join(this._location, "package.json");
   }
 
   get version() {
@@ -45,6 +50,10 @@ export default class Package {
     return this._package.peerDependencies;
   }
 
+  get optionalDependencies() {
+    return this._package.optionalDependencies;
+  }
+
   get allDependencies() {
     return objectAssign(
       {},
@@ -63,6 +72,16 @@ export default class Package {
 
   toJsonString() {
     return JSON.stringify(this._package, null, 2) + "\n";
+  }
+
+  addDependency(type, dep, version, callback) {
+    (this._package[type] || (this._package[type] = {}))[dep] = version;
+
+    this.writePackageJson(callback);
+  }
+
+  writePackageJson(callback) {
+    FileSystemUtilities.writeFile(this.packageJsonLocation, this.toJsonString(), callback);
   }
 
   /**

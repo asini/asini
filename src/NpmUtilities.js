@@ -71,6 +71,14 @@ export default class NpmUtilities {
     return dep.match(/^(@?[^@]+)(?:@(.+))?/).slice(1, 3);
   }
 
+  @logger.logifyAsync
+  static getLatestVersion(pkg, callback) {
+    ChildProcessUtilities.exec(`npm show ${pkg} version`, {}, (err, val) => {
+      if (err) callback(err);
+      callback(null, val.trim());
+    });
+  }
+
   @logger.logifySync
   static addDistTag(packageName, version, tag) {
     ChildProcessUtilities.execSync(`npm dist-tag add ${packageName}@${version} ${tag}`);
