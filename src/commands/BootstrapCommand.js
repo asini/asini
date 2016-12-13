@@ -1,12 +1,12 @@
 import FileSystemUtilities from "../FileSystemUtilities";
 import PackageUtilities from "../PackageUtilities";
-import BootstrapMixin from "../mixins/BootstrapMixin";
+import BootstrapUtilities from "../BootstrapUtilities";
 import Command from "../Command";
 import async from "async";
 import path from "path";
 import semver from "semver";
 
-export default class BootstrapCommand extends BootstrapMixin(Command) {
+export default class BootstrapCommand extends Command {
   initialize(callback) {
     // Nothing to do...
     callback(null, true);
@@ -34,7 +34,7 @@ export default class BootstrapCommand extends BootstrapMixin(Command) {
       // preinstall bootstrapped packages
       (cb) => this.preinstallPackages(cb),
       // install external dependencies
-      (cb) => this.installExternalDependencies(this.filteredPackages, cb),
+      (cb) => BootstrapUtilities.installExternalDependencies(this, this.filteredPackages, cb),
       // symlink packages and their binaries
       (cb) => this.symlinkPackages(cb),
       // postinstall bootstrapped packages
@@ -112,7 +112,7 @@ export default class BootstrapCommand extends BootstrapMixin(Command) {
    * @param {Array.<String>} packages
    */
   dependencySatisfiesPackages(dependency, packages) {
-    const {version} = (this.hoistedPackageJson(dependency) || {});
+    const {version} = (BootstrapUtilities.hoistedPackageJson(this.repository.rootPath, dependency) || {});
     return packages.every((pkg) => {
       return semver.satisfies(
         version,
@@ -185,7 +185,7 @@ export default class BootstrapCommand extends BootstrapMixin(Command) {
             if (dependencyPackageJson.bin) {
               const destFolder = filteredPackage.nodeModulesLocation;
               packageActions.push((cb) => {
-                this.createBinaryLink(dependencyLocation, destFolder, dependency, dependencyPackageJson.bin, cb);
+                BootstrapUtilities.createBinaryLink(dependencyLocation, destFolder, dependency, dependencyPackageJson.bin, cb);
               });
             }
           }

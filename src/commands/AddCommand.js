@@ -1,9 +1,9 @@
 import async from "async";
 import Command from "../Command";
 import NpmUtilities from "../NpmUtilities";
-import BootstrapMixin from "../mixins/BootstrapMixin";
+import BootstrapUtilities from "../BootstrapUtilities";
 
-export default class AddCommand extends BootstrapMixin(Command) {
+export default class AddCommand extends Command {
 
   initialize(callback) {
     if (!this.input.length) {
@@ -43,7 +43,7 @@ export default class AddCommand extends BootstrapMixin(Command) {
     }), this.concurrency, (err) => {
       this.progressBar.terminate();
       if (err) return callback(err);
-      this.installExternalDependencies(this.packages, (err) => {
+      BootstrapUtilities.installExternalDependencies(this, this.packages, (err) => {
         if (err) return callback(err);
         callback(null, true);
       });
