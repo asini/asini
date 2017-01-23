@@ -1,3 +1,24 @@
+## v1.4.0 (2017-01-23)
+
+#### Breaking change
+* Other
+  * [#62](https://github.com/asini/asini/pull/62) Drop node 0.10/0.12 support and update dependencies. ([@gigabo](https://github.com/gigabo))
+
+#### Enhancement
+* Other
+  * [#46](https://github.com/asini/asini/pull/46) Add an `asini add` command. ([@gigabo](https://github.com/gigabo))
+
+#### Bug fix
+* Other
+  * [#67](https://github.com/asini/asini/pull/67) Don't prune the repo root when hoisting. ([@gigabo](https://github.com/gigabo))
+  * [#63](https://github.com/asini/asini/pull/63) Remove unused logging parameter.. ([@evocateur](https://github.com/evocateur))
+
+#### Commiters: 4
+- Bo Borgerson ([gigabo](https://github.com/gigabo))
+- Daniel Stockman ([evocateur](https://github.com/evocateur))
+- Douglas Wade ([doug-wade](https://github.com/doug-wade))
+- Sresan Thevarajah ([sresant](https://github.com/sresant))
+
 ## v1.3.0 (2016-11-18)
 
 #### Enhancement
