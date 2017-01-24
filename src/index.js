@@ -6,6 +6,7 @@ import CleanCommand from "./commands/CleanCommand";
 import DiffCommand from "./commands/DiffCommand";
 import InitCommand from "./commands/InitCommand";
 import RunCommand from "./commands/RunCommand";
+import ExportCommand from "./commands/ExportCommand";
 import ExecCommand from "./commands/ExecCommand";
 import AddCommand from "./commands/AddCommand";
 import LsCommand from "./commands/LsCommand";
@@ -20,6 +21,7 @@ export const __commands__ = exposeCommands([
   DiffCommand,
   InitCommand,
   RunCommand,
+  ExportCommand,
   ExecCommand,
   AddCommand,
   LsCommand,
