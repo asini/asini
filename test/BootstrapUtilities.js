@@ -2,6 +2,8 @@ import assert from "assert";
 
 import BootstrapUtilities from "../src/BootstrapUtilities";
 
+// TODO: these tests should actually test the functionality of each function, not just test the existence of the function.
+
 describe("BootstrapUtilities", () => {
   describe(".createBinaryLink()", () => {
     it("should exist", () => {
