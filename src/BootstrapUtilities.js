@@ -13,9 +13,10 @@ export default class BootstrapUtilities {
 
   static hoistedPackageJson(rootPath, dependency) {
     try {
-      return require((BootstrapUtilities.hoistedDirectory(rootPath, dependency), "package.json"));
+      return require(path.join(BootstrapUtilities.hoistedDirectory(rootPath, dependency), "package.json"));
     } catch (e) {
-      // Pass.
+      // Do not silently ignore this error.
+      // TODO: Either log the error or take another action.
     }
   }
 
@@ -187,10 +188,10 @@ export default class BootstrapUtilities {
           // Link binaries into dependent packages so npm scripts will have
           // access to them.
           async.series(root.map(({name, dependents}) => (cb) => {
-            const {bin} = (BootstrapUtilities.hoistedPackageJson(name) || {});
+            const {bin} = (BootstrapUtilities.hoistedPackageJson(command.repository.rootPath, name) || {});
             if (bin) {
               async.series(dependents.map((pkg) => (cb) => {
-                const src  = command.hoistedDirectory(name);
+                const src  = BootstrapUtilities.hoistedDirectory(command.repository.rootPath, name);
                 const dest = pkg.nodeModulesLocation;
                 BootstrapUtilities.createBinaryLink(src, dest, name, bin, cb);
               }), cb);
