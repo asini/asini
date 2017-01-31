@@ -35,6 +35,9 @@ class ProgressBarController {
 
   tick(name) {
     if (this.bar) {
+      if (!name) {
+        name = ''
+      }
       this.bar.tick({
         packagename: pad(name.slice(0, 50), 50)
       });
