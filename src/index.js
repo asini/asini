@@ -9,6 +9,7 @@ import RunCommand from "./commands/RunCommand";
 import ExecCommand from "./commands/ExecCommand";
 import AddCommand from "./commands/AddCommand";
 import LsCommand from "./commands/LsCommand";
+import TemplateCommand from "./commands/TemplateCommand";
 import {exposeCommands} from "./Command";
 
 export const __commands__ = exposeCommands([
@@ -23,6 +24,7 @@ export const __commands__ = exposeCommands([
   ExecCommand,
   AddCommand,
   LsCommand,
+  TemplateCommand,
 ]);
 
 import PackageUtilities from "./PackageUtilities";

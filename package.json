@@ -34,6 +34,8 @@
     "inquirer": "^1.2.3",
     "isarray": "^2.0.1",
     "lodash.find": "^4.3.0",
+    "lodash.merge": "4.6.0",
+    "lodash.template": "^4.4.0",
     "lodash.unionwith": "^4.2.0",
     "meow": "^3.7.0",
     "minimatch": "^3.0.0",

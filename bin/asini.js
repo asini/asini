@@ -24,6 +24,7 @@ var cli = meow([
   "  exec       Run a command in each package",
   "  add        Add a dependency to each package (choose packages with --scope)",
   "  ls         List all public packages",
+  "  template   Generates packages from templates",
   "",
   "Options:",
   "  --independent, -i    Version packages independently",
