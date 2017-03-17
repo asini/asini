@@ -2,6 +2,7 @@ import FileSystemUtilities from "../FileSystemUtilities";
 import Command from "../Command";
 import objectAssignSorted from "object-assign-sorted";
 import objectAssign from "object-assign";
+import path from "path";
 
 export default class InitCommand extends Command {
   // don't do any of this.
@@ -17,6 +18,7 @@ export default class InitCommand extends Command {
     this.ensurePackageJSON();
     this.ensureAsiniJson();
     this.ensureNoVersionFile();
+    this.ensureGitignore();
     this.logger.success("Successfully created Asini files");
     callback(null, true);
   }
@@ -90,6 +92,19 @@ export default class InitCommand extends Command {
     if (FileSystemUtilities.existsSync(versionLocation)) {
       this.logger.info("Removing old VERSION file.");
       FileSystemUtilities.unlinkSync(versionLocation);
+    }
+  }
+
+  ensureGitignore() {
+    let {
+      asiniJsonLocation,
+    } = this.repository;
+    const gitignoreLocation = path.join(path.dirname(asiniJsonLocation), ".gitignore");
+    if (!FileSystemUtilities.existsSync(gitignoreLocation)) {
+      this.logger.info("Creating .gitignore");
+      FileSystemUtilities.writeFileSync(gitignoreLocation, `asini-debug.log\nnpm-debug.log\n`);
+    } else {
+      this.logger.info(".gitignore already exists");
     }
   }
 }
